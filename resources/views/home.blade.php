@@ -145,31 +145,45 @@
             </nav>
 
             <div id="mainCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    @foreach($banners as $key => $banner)
-                        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="{{ $key }}" class="{{ $loop->first ? 'active' : '' }}"></button>
-                    @endforeach
-                </div>
+    
+    <div class="carousel-indicators">
+        @foreach($banners as $key => $banner)
+            <button type="button" 
+                    data-bs-target="#mainCarousel" 
+                    data-bs-slide-to="{{ $key }}" 
+                    class="{{ $loop->first ? 'active' : '' }}" 
+                    aria-current="{{ $loop->first ? 'true' : 'false' }}"
+                    aria-label="Slide {{ $key + 1 }}">
+            </button>
+        @endforeach
+    </div>
 
-                <div class="carousel-inner">
-                    @foreach($banners as $banner)
-                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                            <img src="https://placehold.co/1200x400/1f2937/FFF?text=Banner+{{ $key+1 }}" class="d-block w-100" alt="Banner">
-                            <div class="carousel-caption d-none d-md-block">
-                                <h2>Promoção Imperdível</h2>
-                                <p>Os melhores produtos com os melhores preços.</p>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                
-                <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
+   <div class="carousel-inner">
+    @foreach($banners as $banner)
+        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+            
+            <img src="imagem" 
+                 class="d-block w-100" 
+                 alt="Banner {{ $loop->iteration }}" 
+                 style="height: 400px; object-fit: cover;"
+                 onerror="this.onerror=null;this.src='https: //placehold.co/1200x400/red/white?text=Erro+Imagem';"> 
+                 <div class="carousel-caption d-none d-md-block">
+                <h2>Promoção Imperdível</h2>
+                <p>Os melhores produtos com os melhores preços.</p>
             </div>
+        </div>
+    @endforeach
+</div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Próximo</span>
+    </button>
+</div>
 
             <div class="mb-4 text-center">
                 <h2 class="fw-bold" style="color: #fff; display: inline-block; border-bottom: 4px solid #AE171C; padding-bottom: 10px;">
