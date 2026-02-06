@@ -1,18 +1,16 @@
 @php
-    // DADOS MOCK
     $banners = [
-        'banner_exemplo_1.jpg', 
-        'banner_exemplo_2.jpg', 
-        'banner_exemplo_3.jpg'
+        'https://casalotimotors.com.br/gallery_gen/1d97d9b71fcece8b1aebd092f8936f12_fit.png?ts=1757092059.jpg', 
+        'https://i.pinimg.com/originals/a8/86/0a/a8860a7d2eb5cf3abb8f899c3aef1639.jpg', 
+        'https://www.bmw-motorrad.com.br/content/dam/bmwmotorradnsc/marketBR/bmw-motorrad_com_br/servicos-financeiros/imagens-2023/banner-info-legal-motos-desk.jpg.asset.1712342488736.jpg'
     ];
-
     $produtos = [
-        (object)['id' => 1, 'nome' => 'Tênis Runner', 'preco' => 299.90, 'foto' => 'tenis.jpg'],
-        (object)['id' => 2, 'nome' => 'Camiseta Sport', 'preco' => 89.90, 'foto' => 'camisa.jpg'],
-        (object)['id' => 3, 'nome' => 'Relógio Smart', 'preco' => 1250.00, 'foto' => 'relogio.jpg'],
-        (object)['id' => 4, 'nome' => 'Fone Bluetooth', 'preco' => 150.00, 'foto' => 'fone.jpg'],
-        (object)['id' => 5, 'nome' => 'Mochila Preta', 'preco' => 120.00, 'foto' => 'mochila.jpg'],
-        (object)['id' => 6, 'nome' => 'Garrafa Térmica', 'preco' => 45.00, 'foto' => 'garrafa.jpg'],
+        (object)['id' => 1, 'nome' => 'Capacete LS2 Storm', 'preco' => 649.90, 'foto' => 'https://images.tcdn.com.br/img/img_prod/733377/capacete_ls2_storm_ff800_sprinter_matte_black_silver_cobalt_1639515_1_9adf7526a88eeeefb504b5d45195e4b0_20250509110602.jpeg'],
+        (object)['id' => 2, 'nome' => 'Jaqueta X11 Evo', 'preco' => 899.90, 'foto' => 'https://paulinhomotos.fbitsstatic.net/img/p/jaqueta-x11-evo-3-impermeavel-70506/261758.jpg?w=565&h=565&v=no-change&qs=ignore.jpg'],
+        (object)['id' => 3, 'nome' => 'Luva Couro Touch', 'preco' => 149.90, 'foto' => 'https://images.tcdn.com.br/img/img_prod/661181/luva_x11_motociclista_masculina_couro_cano_longo_epic_5902593_1_ba4021454e4bdd370c8fd6d11a5f0158_20251021163552.jpg'],
+        (object)['id' => 4, 'nome' => 'Escapamento Sport', 'preco' => 450.00, 'foto' => 'https://images.tcdn.com.br/img/img_prod/340177/escapamento_esportivo_fan_160_titan_160_vermelho_mk_race_20107_1_20250707145127.jpeg'],
+        (object)['id' => 5, 'nome' => 'Kit Relação Vaz', 'preco' => 220.00, 'foto' => 'https://images.tcdn.com.br/img/img_prod/340177/escapamento_esportivo_fan_160_titan_160_vermelho_mk_race_20107_1_20250707145127.jpeg'],
+        (object)['id' => 6, 'nome' => 'Óleo Motul 10W40', 'preco' => 65.00, 'foto' => 'https://images.tcdn.com.br/img/img_prod/681364/kit_2_motul_5100_10w40_filtro_fram_ph6017a_1659_5_02037cf6ef2bb2670619d38aeb9c2e21.jpg'],
     ];
 @endphp
 
@@ -28,57 +26,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* barra do Laravel */
-        nav.bg-white {
+        
+        nav, nav[class*="bg-white"] {
             background-color: #1f2937 !important; 
             border-bottom: 1px solid #374151 !important;
-            
         }
-
-        /* Força o texto dos links e ícones a ficar claro (branco/cinza claro) */
-        nav.bg-white a, 
-        nav.bg-white button,
-        nav.bg-white div {
+        nav a, nav div, nav span { color: #e5e7eb !important; }
+        
+        /* Botão do Usuário (Dropdown) */
+        nav button.bg-white {
+            background-color: #1f2937 !important; 
+            border: none !important; 
             color: #e5e7eb !important; 
         }
         
-
-        /* Ajusta o Logo do Laravel para branco */
-        nav.bg-white svg.fill-current {
-         
-        }
-
-    
-        nav.bg-white svg.text-gray-500 {
-            color: #e5e7eb !important;
-        }
-
-        /* "Loja" */
-        header.bg-white {
-            background-color: #1f2937 !important;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5) !important;
-            border-bottom: 1px solid #374151 !important;
-        }
-        
-  /* Botão do ususario */
-        nav button.bg-white {
-            background-color: #1f2937 !important; 
-            color: #e5e7eb !important;
-            border: none !important; 
-        }
+        /* Ajusta a cor quando passa o mouse em cima dele */
         nav button.bg-white:hover {
-            background-color: #374151 !important; 
+            background-color: #374151 !important;
+}
+
+       
+        div.absolute {
+            background-color: #1f2937 !important;
+            border: 1px solid #374151 !important;
         }
-
-
-        /* --- ESTILOS GERAIS --- */
-        .min-h-screen { background-color: #111827; } 
-        a { text-decoration: none; }
+        div.absolute a { color: #e5e7eb !important; }
+        div.absolute a:hover { background-color: #374151 !important; }
         
-        /* --- ESTILOS DA LOJA --- */
+        /* Header "Loja" */
+        header, header[class*="bg-white"] { 
+            background-color: #1f2937 !important; 
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.5) !important; 
+            border-bottom: 1px solid #374151 !important; 
+        }
+        header h2 { color: #e5e7eb !important; }
+
+        /* =========================================
+           ESTILOS DA LOJA
+           ========================================= */
+        .min-h-screen { background-color: #111827; }
+        a { text-decoration: none; }
         .shop-wrapper { font-family: 'Poppins', sans-serif; color: #f3f4f6; }
 
-        /* Navbar Secundária (Loja) */
+        /* Navbar da Loja */
         .shop-navbar { 
             background: #1f2937; 
             border: 1px solid #374151;
@@ -87,17 +77,19 @@
             margin-bottom: 20px;
         }
         .shop-navbar .navbar-brand { font-weight: 700; letter-spacing: 1px; color: #fff !important; }
-        .shop-navbar .nav-link { font-weight: 500; color: rgba(255,255,255,0.7) !important; transition: 0.3s; }
-        .shop-navbar .nav-link:hover { color: #AE171C !important; }
-        .shop-navbar .nav-link.active { color: #fff !important; }
+
+        /* Botão Carrinho */
+        .btn-cart {
+            color: #e5e7eb; border: 1px solid #374151; transition: 0.3s; position: relative;
+        }
+        .btn-cart:hover {
+            background-color: #374151; color: #fff; border-color: #AE171C;
+        }
+        .badge-cart { background-color: #AE171C; font-size: 0.7rem; }
 
         /* Carrossel */
-        #mainCarousel { 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5); 
-            border-radius: 0 0 12px 12px; 
-            overflow: hidden; 
-        }
-        .carousel-item img { height: 400px; object-fit: cover; filter: brightness(0.7); }
+        #mainCarousel { box-shadow: 0 4px 20px rgba(0,0,0,0.5); border-radius: 0 0 12px 12px; overflow: hidden; }
+        .carousel-item img { height: 400px; object-fit: cover; filter: brightness(0.8); }
 
         /* Cards de Produto */
         .produto-card { 
@@ -111,91 +103,80 @@
         .produto-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.5); border-color: #AE171C; }
         .produto-card img { height: 220px; object-fit: cover; border-bottom: 1px solid #374151; width: 100%; }
         
-        /* Título e Texto do Card */
         .card-title { color: #fff !important; }
         .card-text { color: #9ca3af !important; } 
-
-        /* Preço e Botão */
         .price-tag { font-size: 1.4rem; font-weight: 700; color: #4ade80; margin-bottom: 1rem; } 
+        
         .btn-comprar { 
             background: linear-gradient(135deg, #AE171C 0%, #d62d35 100%);
             border: none; color: white; padding: 10px; border-radius: 6px;
             font-weight: 600; width: 100%; display: block; text-align: center;
         }
-        .btn-comprar:hover
-         { filter: brightness(1.1); color: white; transform: scale(1.02); 
-        }
+        .btn-comprar:hover { filter: brightness(1.1); color: white; transform: scale(1.02); }
     </style>
 
     <div class="py-12 shop-wrapper">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
-            <nav class="navbar navbar-expand-lg navbar-dark shop-navbar px-3">
-                <a class="navbar-brand" href="#">MINHA LOJA</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#shopNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="shopNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link active" href="#">Início</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Carrinho</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Ofertas</a></li>
-                    </ul>
+            <nav class="navbar navbar-dark shop-navbar px-4 d-flex justify-content-between align-items-center">
+                <a class="navbar-brand m-0" href="#">RPM Motos</a>
+                
+                <div>
+                    <a href="#" class="btn btn-cart p-2 px-3 rounded-pill">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span class="ms-2 fw-bold">Carrinho</span>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-cart">#</span>
+                    </a>
                 </div>
             </nav>
 
             <div id="mainCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
-    
-    <div class="carousel-indicators">
-        @foreach($banners as $key => $banner)
-            <button type="button" 
-                    data-bs-target="#mainCarousel" 
-                    data-bs-slide-to="{{ $key }}" 
-                    class="{{ $loop->first ? 'active' : '' }}" 
-                    aria-current="{{ $loop->first ? 'true' : 'false' }}"
-                    aria-label="Slide {{ $key + 1 }}">
-            </button>
-        @endforeach
-    </div>
+                <div class="carousel-indicators">
+                    @foreach($banners as $key => $banner)
+                        <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="{{ $key }}" class="{{ $loop->first ? 'active' : '' }}"></button>
+                    @endforeach
+                </div>
 
-   <div class="carousel-inner">
-    @foreach($banners as $banner)
-        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-            
-            <img src="imagem" 
-                 class="d-block w-100" 
-                 alt="Banner {{ $loop->iteration }}" 
-                 style="height: 400px; object-fit: cover;"
-                 onerror="this.onerror=null;this.src='https: //placehold.co/1200x400/red/white?text=Erro+Imagem';"> 
-                 <div class="carousel-caption d-none d-md-block">
-                <h2>Promoção Imperdível</h2>
-                <p>Os melhores produtos com os melhores preços.</p>
+                <div class="carousel-inner">
+                    @foreach($banners as $banner)
+                        <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
+                            <img src="{{ $banner }}" 
+                                 class="d-block w-100" 
+                                 alt="Banner" 
+                                 style="height: 400px; object-fit: cover;"
+                                 onerror="this.onerror=null;this.src='https://placehold.co/1200x400/333/FFF?text=Erro+Imagem';">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h2>Promoção Imperdível</h2>
+                                <p>Os melhores produtos com os melhores preços.</p>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                
+                <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-        </div>
-    @endforeach
-</div>
-
-    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Anterior</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Próximo</span>
-    </button>
-</div>
 
             <div class="mb-4 text-center">
-                <h2 class="fw-bold" style="color: #fff; display: inline-block; border-bottom: 4px solid #AE171C; padding-bottom: 10px;">
-                    Nossos Produtos
-                </h2>
+                <a href="/produtos"> 
+                    <h2 class="fw-bold" style="color: #fff; display: inline-block; border-bottom: 4px solid #AE171C; padding-bottom: 10px;">
+                        Nossos Produtos
+                    </h2>
+                </a>
             </div>
 
             <div class="row g-4">
                 @foreach($produtos as $produto)
                     <div class="col-md-3 col-sm-6">
                         <div class="card h-100 produto-card">
-                            <img src="https://placehold.co/300x300/374151/FFF?text={{ urlencode($produto->nome) }}" class="card-img-top" alt="{{ $produto->nome }}">
+                            
+                            <img src="{{ str_starts_with($produto->foto, 'http') ? $produto->foto : 'https://placehold.co/300x300/374151/FFF?text=' . urlencode($produto->nome) }}" 
+                                 class="card-img-top" 
+                                 alt="{{ $produto->nome }}">
                             
                             <div class="card-body d-flex flex-column p-3">
                                 <h5 class="card-title fw-bold">{{ $produto->nome }}</h5>
@@ -203,9 +184,11 @@
                                 
                                 <div class="mt-auto">
                                     <p class="price-tag">R$ {{ number_format($produto->preco, 2, ',', '.') }}</p>
-                                    <button class="btn btn-comprar">
-                                        <i class="fa-solid fa-cart-shopping me-2"></i> Comprar
-                                    </button>
+                                    <a href="#"> 
+                                        <button class="btn btn-comprar">
+                                            <i class="fa-solid fa-cart-shopping me-2"></i> Comprar
+                                        </button>
+                                    </a>
                                 </div>
                             </div>
                         </div>
