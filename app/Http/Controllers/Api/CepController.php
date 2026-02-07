@@ -1,4 +1,4 @@
-    <?php
+<?php
 
     namespace App\Http\Controllers\Api;
 
@@ -10,7 +10,7 @@
     {
         public function show($cep)
         {
-            if(!preg_match('/^[0-9]{8}$/')) 
+           if(!preg_match('/^[0-9]{8}$/', $cep))
                 {
                 return response()->json(['error' => 'CEP inválido.'], 400);
                 }
