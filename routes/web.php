@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductsController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,9 +24,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::get('/userlist',[UserController::class, 'index'])->name('index');
-Route::put('/userlist/{user}',[UserController::class, 'update'])->name('update');
-Route::post('/userlist',[UserController::class, 'store'])->name('store');
-Route::delete('/userlist/{user}',[UserController::class, 'destroy'])->name('destroy');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/productslist', [ProductsController::class, 'index'])->name('products.index');
+    Route::post('/productslist', [ProductsController::class, 'store'])->name('products.store'); // Agora o nome bate!
+    Route::put('/productslist/{product}', [ProductsController::class, 'update'])->name('products.update');
+    Route::delete('/productslist/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+});
 
 require __DIR__.'/auth.php';
