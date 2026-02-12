@@ -19,6 +19,17 @@ class ProductsController extends Controller
   
    public function store(Request $request)
     {
+        $request->validate([
+        'nome' => 'required',
+        'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
+    ]);
+
+    $caminhoFoto = null;
+
+    if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+        $caminhoFoto = $request->foto->store('produtos', 'public');
+    }
+
         Product::create([
             'user_id' => Auth::id(),
             'nome' => $request->nome,
@@ -26,8 +37,7 @@ class ProductsController extends Controller
             'preco' => $request->preco,
             'quantidade' => $request->quantidade,
             'categorias' => $request->categorias ?? 'Outros', 
-            
-            'foto' => null,
+            'foto' => $caminhoFoto,
         ]);
 
         return redirect()->route('products.index');

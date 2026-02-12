@@ -65,43 +65,57 @@
                         Excluir
                     </button>
 
-                    <div class="modal fade" id="viewProductModal{{ $product->id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header bg-info text-white">
-                                    <h5 class="modal-title">Detalhes do Produto #{{ $product->id }}</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3 border-bottom pb-2">
-                                        <label class="fw-bold text-muted small">NOME</label>
-                                        <p class="fs-5 mb-0">{{ $product->nome }}</p>
-                                    </div>
-                                    <div class="mb-3 border-bottom pb-2">
-                                        <label class="fw-bold text-muted small">DESCRIÇÃO</label>
-                                        <p class="mb-0">{{ $product->descricao ?? 'Sem descrição.' }}</p>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6 mb-3 border-bottom pb-2">
-                                            <label class="fw-bold text-muted small">CATEGORIA</label>
-                                            <p class="mb-0"><span class="badge bg-primary">{{ $product->categorias }}</span></p>
-                                        </div>
-                                        <div class="col-6 mb-3 border-bottom pb-2">
-                                            <label class="fw-bold text-muted small">ESTOQUE</label>
-                                            <p class="mb-0">{{ $product->quantidade }} unidades</p>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="fw-bold text-muted small">PREÇO</label>
-                                        <p class="fs-4 text-success fw-bold mb-0">R$ {{ number_format($product->preco, 2, ',', '.') }}</p>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                                </div>
-                            </div>
-                        </div>
+
+<!--Modal de Visualizar-->
+
+    <div class="modal fade" id="viewProductModal{{ $product->id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title">Detalhes do Produto #{{ $product->id }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+            <div class="modal-body">
+                
+                <div class="text-center mb-4">
+                        <img src="{{ asset('storage/' . $product->foto) }}" 
+                             alt="{{ $product->nome }}" 
+                             class="img-fluid rounded shadow-sm" 
+                             style="max-height: 250px; object-fit: contain;">
+                </div>
+                <div class="mb-3 border-bottom pb-2">
+                    <label class="fw-bold text-muted small">NOME</label>
+                    <p class="fs-5 mb-0">{{ $product->nome }}</p>
+                </div>
+                <div class="mb-3 border-bottom pb-2">
+                    <label class="fw-bold text-muted small">DESCRIÇÃO</label>
+                    <p class="mb-0">{{ $product->descricao ?? 'Sem descrição.' }}</p>
+                </div>
+                <div class="row">
+                    <div class="col-6 mb-3 border-bottom pb-2">
+                        <label class="fw-bold text-muted small">CATEGORIA</label>
+                        <p class="mb-0"><span class="badge bg-primary">{{ $product->categorias }}</span></p>
                     </div>
+                    <div class="col-6 mb-3 border-bottom pb-2">
+                        <label class="fw-bold text-muted small">ESTOQUE</label>
+                        <p class="mb-0">{{ $product->quantidade }} unidades</p>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="fw-bold text-muted small">PREÇO</label>
+                    <p class="fs-4 text-success fw-bold mb-0">R$ {{ number_format($product->preco, 2, ',', '.') }}</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Modal de Editar-->
 
                     <div class="modal fade" id="editProductModal{{ $product->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
@@ -131,6 +145,12 @@
                                                 <option value="Outros" {{ $product->categorias == 'Outros' ? 'selected' : '' }}>Outros</option>
                                             </select>
                                         </div>
+                                        
+                                        <div class="mb-3">
+                                            <label>Foto do Produto</label>
+                                            <input type="file" name="foto" class="form-control" accept="image/*" required>
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-6 mb-3">
                                                 <label>Preço</label>
@@ -150,6 +170,9 @@
                             </div>
                         </div>
                     </div>
+
+
+<!--Modal de Deletar-->
 
                     <div class="modal fade" id="deleteProductModal{{ $product->id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog">
@@ -179,53 +202,66 @@
         </tbody>
     </table>
 
+
+
+   <!--Modal de Criar-->
+
     <div class="modal fade" id="createProductModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title">Novo Produto</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form action="{{ route('products.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label>Nome</label>
-                            <input type="text" name="nome" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label>Descrição</label>
-                            <input type="text" name="descricao" class="form-control" placeholder="Descrição do produto">
-                        </div>
-                        <div class="mb-3">
-                            <label>Categoria</label>
-                            <select name="categorias" class="form-select" required>
-                                <option value="" disabled selected>Selecione...</option>
-                                <option value="Acessório">Acessório</option>
-                                <option value="Peça">Peça</option>
-                                <option value="Ferramenta">Ferramenta</option>
-                                <option value="Outros">Outros</option>
-                            </select>
-                        </div>
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label>Preço</label>
-                                <input type="number" step="0.01" name="preco" class="form-control" placeholder="0.00" required>
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label>Quantidade</label>
-                                <input type="number" name="quantidade" class="form-control" placeholder="0" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-success">Criar</button>
-                    </div>
-                </form>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">Novo Produto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
+            
+            <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Nome</label>
+                        <input type="text" name="nome" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Descrição</label>
+                        <input type="text" name="descricao" class="form-control" placeholder="Descrição do produto">
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Categoria</label>
+                        <select name="categorias" class="form-select" required>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="Acessório">Acessório</option>
+                            <option value="Peça">Peça</option>
+                            <option value="Ferramenta">Ferramenta</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>Foto do Produto</label>
+                        <input type="file" name="foto" class="form-control" accept="image/*" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label>Preço</label>
+                            <input type="number" name="preco" class="form-control" placeholder="0.00" required>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label>Quantidade</label>
+                            <input type="number" name="quantidade" class="form-control" placeholder="0" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Criar</button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 
 </body>
 </html>
