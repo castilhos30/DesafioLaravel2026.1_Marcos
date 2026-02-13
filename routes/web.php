@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+Route::get('/produtos', function () {
+    return view('pagina_produtos');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/productslist', [ProductsController::class, 'index'])->name('products.index');
