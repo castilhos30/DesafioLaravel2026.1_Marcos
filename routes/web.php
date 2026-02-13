@@ -30,5 +30,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/productslist/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/productslist/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 });
+Route::get('/carrinho', function () {
+    return view('carrinho');
+})->name('carrinho');
 
 require __DIR__.'/auth.php';
