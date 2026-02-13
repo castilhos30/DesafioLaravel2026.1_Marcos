@@ -105,82 +105,58 @@
         <div class="row g-4">
             
             <div class="col-lg-8">
-                
-                <div class="card card-dark mb-3 p-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="cart-img-container flex-shrink-0">
-                            <i class="bi bi-box-seam-fill"></i>
-                        </div>
-                        
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="fw-bold text-white mb-1">Kit Turbo Garrett GT35</h5>
-                                <button class="btn btn-link text-danger p-0 text-decoration-none">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                            <p class="text-secondary small mb-2">Categoria: Peças de Performance</p>
-                            
-                            <div class="d-flex justify-content-between align-items-end mt-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <button class="btn btn-qty rounded-circle"><i class="bi bi-dash"></i></button>
-                                    <input type="text" class="form-control form-control-dark text-center p-0" value="1" style="width: 40px; height: 35px; border: none;">
-                                    <button class="btn btn-qty rounded-circle"><i class="bi bi-plus"></i></button>
-                                </div>
-                                <div class="text-end">
-                                    <small class="text-secondary d-block">Unit: R$ 3.990,00</small>
-                                    <span class="text-neon fs-5">R$ 3.990,00</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card card-dark mb-3 p-3">
-                    <div class="d-flex align-items-center gap-3">
-                        <div class="cart-img-container flex-shrink-0">
-                            <i class="bi bi-speedometer"></i>
-                        </div>
-                        <div class="flex-grow-1">
-                            <div class="d-flex justify-content-between">
-                                <h5 class="fw-bold text-white mb-1">Conta Giros Monster 5"</h5>
-                                <button class="btn btn-link text-danger p-0 text-decoration-none">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                            </div>
-                            <p class="text-secondary small mb-2">Categoria: Acessórios</p>
-                            
-                            <div class="d-flex justify-content-between align-items-end mt-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <button class="btn btn-qty rounded-circle"><i class="bi bi-dash"></i></button>
-                                    <input type="text" class="form-control form-control-dark text-center p-0" value="1" style="width: 40px; height: 35px; border: none;">
-                                    <button class="btn btn-qty rounded-circle"><i class="bi bi-plus"></i></button>
-                                </div>
-                                <div class="text-end">
-                                    <small class="text-secondary d-block">Unit: R$ 549,90</small>
-                                    <span class="text-neon fs-5">R$ 1.099,80</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+    
+    @if(count($carrinho) > 0)
+        
+        @foreach($carrinho as $id => $item) <div class="card card-dark mb-3 p-3">
+    <div class="d-flex align-items-center gap-3">
+        <div class="cart-img-container flex-shrink-0">
+            @if($item['foto'])
+                <img src="{{ asset('storage/' . $item['foto']) }}" width="80" class="rounded">
+            @else
+                <i class="bi bi-box-seam-fill fs-2"></i>
+            @endif
+        </div>
+        
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between">
+                <h5 class="fw-bold text-white mb-1">{{ $item['nome'] }}</h5>
+                <a href="#" class="btn btn-link text-danger p-0 text-decoration-none">
+                    <i class="bi bi-trash"></i>
+                </a>
             </div>
+            
+            <div class="d-flex justify-content-between align-items-end mt-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="text-white">Qtd: {{ $item['quantidade'] }}</span>
+                </div>
+                <div class="text-end">
+                    <small class="text-secondary d-block">Unit: R$ {{ number_format($item['preco'], 2, ',', '.') }}</small>
+                    <span class="text-neon fs-5">
+                        R$ {{ number_format($item['preco'] * $item['quantidade'], 2, ',', '.') }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 
+    @else
+        <div class="alert alert-warning">Seu carrinho está vazio.</div>
+    @endif
+
+</div>
             <div class="col-lg-4">
                 <div class="card card-dark p-4 position-sticky" style="top: 20px;">
                     <h4 class="fw-bold text-white mb-4">Resumo do Pedido</h4>
 
-                    <div class="d-flex justify-content-between mb-3 text-secondary">
-                        <span>Subtotal</span>
-                        <span>R$ 5.089,80</span>
-                    </div>
-
+    
                     <hr class="border-secondary opacity-25">
 
                     <div class="d-flex justify-content-between mb-4 align-items-center">
                         <span class="fs-5 fw-bold text-white">Total</span>
-                        <span class="fs-2 text-neon">R$ 5.089,80</span>
+                        <span class="fs-2 text-neon">R$ {{ number_format($total, 2, ',', '.') }}</span>
                     </div>
 
                     <div class="d-grid gap-2">
@@ -197,7 +173,6 @@
 
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

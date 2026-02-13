@@ -58,4 +58,43 @@ class ProductsController extends Controller
         $product->delete();
         return redirect()->route('products.index');
     }
+
+public function adicionarAoCarrinho($id)
+    {
+        $product = Product::find($id);
+
+        if(!$product) {
+            abort(404);
+        }
+
+        $cart = session()->get('cart', []);
+
+        if(isset($cart[$id])) {
+            $cart[$id]['quantidade']++;
+        } else {
+
+            $cart[$id] = [
+                "nome" => $product->nome,
+                "quantidade" => 1,
+                "preco" => $product->preco,
+                "foto" => $product->foto
+            ];
+        }
+
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Produto adicionado ao carrinho!');
+    }
+    public function carrinho()
+    {
+       
+        $carrinho = session()->get('cart', []);
+        
+        $total = 0;
+        foreach($carrinho as $item) {
+            $total += $item['preco'] * $item['quantidade'];
+        }
+
+        return view('carrinho', compact('carrinho', 'total'));
+    }
+
 }

@@ -30,8 +30,32 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/productslist/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/productslist/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 });
+
 Route::get('/carrinho', function () {
-    return view('carrinho');
+    $carrinho = [
+        [
+            'nome' => 'SLA',
+            'categoria' => 'Peças',
+            'preco' => 3990.00,
+            'quantidade' => 1,
+            'foto' => null
+        ],
+        [
+            'nome' => 'Volante Esportivo',
+            'categoria' => 'Acessórios',
+            'preco' => 549.90,
+            'quantidade' => 2,
+            'foto' => null
+        ]
+    ];
+    $total = 0;
+    foreach($carrinho as $item) {
+        $total += $item['preco'] * $item['quantidade'];
+    }
+    return view('carrinho', compact('carrinho', 'total'));
 })->name('carrinho');
+
+Route::get('/carrinho', [ProductsController::class, 'carrinho'])->name('carrinho');
+Route::get('/add-to-cart/{id}', [ProductsController::class, 'adicionarAoCarrinho'])->name('add_to_cart');
 
 require __DIR__.'/auth.php';
