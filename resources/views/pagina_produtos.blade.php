@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nossa Loja - Todos os Produtos</title>
+    <title>RPM Motos - Catálogo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
@@ -20,7 +20,6 @@
             border-bottom: 1px solid #333;
         }
 
-       
         .search-input {
             background-color: #1e1e1e;
             border: 1px solid #333;
@@ -41,7 +40,6 @@
             border-radius: 8px;
         }
 
-    
         .product-card {
             background-color: #1e1e1e;
             border: 1px solid transparent;
@@ -49,6 +47,8 @@
             overflow: hidden;
             transition: all 0.3s ease;
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
         
         .product-card:hover {
@@ -64,6 +64,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden; /* Para a imagem não vazar */
         }
         .img-container i {
             color: #333;
@@ -72,6 +73,17 @@
         .product-card:hover .img-container i {
             color: #555;
             transform: scale(1.1);
+        }
+        
+        /* Ajuste para imagem real */
+        .product-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .product-card:hover .product-img {
+            transform: scale(1.05);
         }
 
         .price-main {
@@ -86,16 +98,20 @@
             color: #888;
         }
 
-        
-        .page-link {
-            background: #1e1e1e;
-            border-color: #333;
-            color: #fff;
-        }
-        .page-item.active .page-link {
-            background: #2ecc71;
-            border-color: #2ecc71;
+        .btn-comprar {
+            background-color: #2ecc71;
             color: #000;
+            font-weight: bold;
+            border-radius: 50px;
+            border: none;
+            width: 100%;
+            padding: 8px;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+        .btn-comprar:hover {
+            background-color: #27ae60;
+            color: #fff;
         }
     </style>
 </head>
@@ -118,11 +134,13 @@
             </div>
 
             <div class="d-flex align-items-center gap-3">
-                <a href="#" class="btn btn-outline-light position-relative border-0">
+                <a href="{{ route('carrinho') }}" class="btn btn-outline-light position-relative border-0">
                     <i class="bi bi-cart3 fs-4"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                        #
-                    </span>
+                    @if(session('cart'))
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                            {{ count(session('cart')) }}
+                        </span>
+                    @endif
                 </a>
                 <a href="#" class="btn btn-outline-light border-0"><i class="bi bi-person-circle fs-4"></i></a>
             </div>
@@ -142,11 +160,7 @@
                         <option selected>Todas as Categorias</option>
                         <option value="1">Peças</option>
                         <option value="2">Acessórios</option>
-                    </select>
-                    <select class="form-select filter-select w-auto">
-                        <option selected>Mais Recentes</option>
-                        <option value="1">Menor Preço</option>
-                        <option value="2">Maior Preço</option>
+                        <option value="3">Ferramentas</option>
                     </select>
                 </div>
             </div>
@@ -154,64 +168,47 @@
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
 
-            <div class="col">
-                <div class="product-card h-100">
-                    <div class="img-container">
-                        <span class="badge bg-danger position-absolute top-0 start-0 m-3 shadow">OFERTA</span>
-                        <i class="bi bi-box-seam-fill fs-1"></i>
-                    </div>
+            @forelse($products as $product)
+                <div class="col">
+                    <div class="product-card h-100">
+                        <div class="img-container">
+                            @if($product->foto)
+                                <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nome }}" class="product-img">
+                            @else
+                                <i class="bi bi-box-seam-fill fs-1"></i>
+                            @endif
+                        </div>
 
-                    <div class="p-4">
-                        <div class="category-tag mb-2">Peças de Motor</div>
-                        <h5 class="text-white fw-bold mb-3 text-truncate">Kit Turbo Garrett GT35</h5>
-                        
-                        <div class="d-flex justify-content-between align-items-end">
-                            <div>
-                                <small class="text-decoration-line-through text-muted d-block" style="font-size: 0.8rem">R$ 4.500,00</small>
-                                <span class="price-main">R$ 3.990,00</span>
+                        <div class="p-4 d-flex flex-column flex-grow-1">
+                            <div class="category-tag mb-2">{{ $product->categorias }}</div>
+                            <h5 class="text-white fw-bold mb-3 text-truncate">{{ $product->nome }}</h5>
+                            
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-end">
+                                    <span class="price-main">R$ {{ number_format($product->preco, 2, ',', '.') }}</span>
+                                </div>
+                                
+                                <small class="text-secondary d-block mt-2">
+                                    Em até 10x de R$ {{ number_format($product->preco / 10, 2, ',', '.') }}
+                                </small>
+
+                                <a href="{{ route('add_to_cart', $product->id) }}" class="btn btn-comprar shadow-sm">
+                                    <i class="bi bi-bag-plus me-1"></i> Comprar
+                                </a>
                             </div>
                         </div>
-                        <small class="text-success d-block mt-2"><i class="bi bi-truck me-1"></i> Frete Grátis</small>
                     </div>
                 </div>
-            </div>
-
-            <div class="col">
-                <div class="product-card h-100">
-                    <div class="img-container">
-                        <i class="bi bi-speedometer fs-1"></i>
-                    </div>
-                    <div class="p-4">
-                        <div class="category-tag mb-2">Acessórios</div>
-                        <h5 class="text-white fw-bold mb-3 text-truncate">Conta Giros Monster 5"</h5>
-                        <div class="d-flex justify-content-between align-items-end">
-                            <span class="price-main">R$ 549,90</span>
-                        </div>
-                        <small class="text-secondary d-block mt-2">Em até 10x sem juros</small>
-                    </div>
+            @empty
+                <div class="col-12 text-center py-5">
+                    <h3 class="text-muted">Nenhum produto cadastrado ainda.</h3>
                 </div>
-            </div>
+            @endforelse
 
-            <div class="col">
-                <div class="product-card h-100">
-                    <div class="img-container">
-                        <i class="bi bi-tools fs-1"></i>
-                    </div>
-                    <div class="p-4">
-                        <div class="category-tag mb-2">Ferramentas</div>
-                        <h5 class="text-white fw-bold mb-3 text-truncate">Jogo de Chaves 150pçs</h5>
-                        <div class="d-flex justify-content-between align-items-end">
-                            <span class="price-main">R$ 890,00</span>
-                        </div>
-                        <small class="text-secondary d-block mt-2">Últimas unidades</small>
-                    </div>
-                </div>
-            </div>
+        </div> 
 
-            
-
-        </div> <div class="d-flex justify-content-center mt-5 mb-5">
-
+        <div class="d-flex justify-content-center mt-5 mb-5">
+            {{-- {{ $products->links() }} --}}
         </div>
         
         <footer class="text-center text-muted py-4 border-top border-secondary border-opacity-25">
@@ -221,5 +218,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
 </body>
 </html>

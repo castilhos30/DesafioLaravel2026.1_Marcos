@@ -96,5 +96,9 @@ public function adicionarAoCarrinho($id)
 
         return view('carrinho', compact('carrinho', 'total'));
     }
+    public function pagina_produtos() {
+    $products = Product::all(); 
+    return view('pagina_produtos', compact('products')); 
+}
 
 }

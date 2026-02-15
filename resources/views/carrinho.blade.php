@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carrinho - TurboStore</title>
+    <title>Carrinho - RPM Motos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
@@ -94,7 +94,7 @@
 
     <nav class="navbar navbar-dark bg-black py-3 border-bottom border-secondary border-opacity-25 mb-4">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#">
+            <a class="navbar-brand fw-bold" href="/produtos">
                 <i class="bi bi-arrow-left me-2"></i> Continuar Comprando
             </a>
             <span class="text-white fw-bold">Carrinho  <i class="bi bi-cart4"></i> </span>
@@ -108,11 +108,11 @@
     
     @if(count($carrinho) > 0)
         
-        @foreach($carrinho as $id => $item) <div class="card card-dark mb-3 p-3">
+        @foreach($carrinho  as $product) <div class="card card-dark mb-3 p-3">
     <div class="d-flex align-items-center gap-3">
         <div class="cart-img-container flex-shrink-0">
-            @if($item['foto'])
-                <img src="{{ asset('storage/' . $item['foto']) }}" width="80" class="rounded">
+            @if($product['foto'])
+                <img src="{{ asset('storage/' . $product['foto']) }}" width="80" class="rounded">
             @else
                 <i class="bi bi-box-seam-fill fs-2"></i>
             @endif
@@ -120,7 +120,7 @@
         
         <div class="flex-grow-1">
             <div class="d-flex justify-content-between">
-                <h5 class="fw-bold text-white mb-1">{{ $item['nome'] }}</h5>
+                <h5 class="fw-bold text-white mb-1">{{ $product['nome'] }}</h5>
                 <a href="#" class="btn btn-link text-danger p-0 text-decoration-none">
                     <i class="bi bi-trash"></i>
                 </a>
@@ -128,12 +128,12 @@
             
             <div class="d-flex justify-content-between align-items-end mt-3">
                 <div class="d-flex align-items-center gap-2">
-                    <span class="text-white">Qtd: {{ $item['quantidade'] }}</span>
+                    <span class="text-white">Qtd: {{ $product['quantidade'] }}</span>
                 </div>
                 <div class="text-end">
-                    <small class="text-secondary d-block">Unit: R$ {{ number_format($item['preco'], 2, ',', '.') }}</small>
+                    <small class="text-secondary d-block">Unit: R$ {{ number_format($product['preco'], 2, '.', '') }}</small>
                     <span class="text-neon fs-5">
-                        R$ {{ number_format($item['preco'] * $item['quantidade'], 2, ',', '.') }}
+                        R$ {{ number_format($product['preco'] * $product['quantidade'], 2, '.', '') }}
                     </span>
                 </div>
             </div>
@@ -156,14 +156,20 @@
 
                     <div class="d-flex justify-content-between mb-4 align-items-center">
                         <span class="fs-5 fw-bold text-white">Total</span>
-                        <span class="fs-2 text-neon">R$ {{ number_format($total, 2, ',', '.') }}</span>
+                        <span class="fs-2 text-neon">R$ {{ number_format($product['preco'] * $product['quantidade'], 2, '.', '') }}</span>
                     </div>
-
+                <form action="/checkout" method="POST">
+                    @csrf
+                   
+                    
                     <div class="d-grid gap-2">
-                        <button class="btn btn-checkout rounded-pill shadow-lg">
-                            Finalizar Compra <i class="bi bi-chevron-right ms-1"></i>
+                         <input type="hidden" name="itens" value="{{ json_encode($carrinho) }}">
+                        <button type="submit" class="btn btn-checkout rounded-pill shadow-lg">
+                            Finalizar Compra
                         </button>
-                        <a href="/loja" class="btn btn-link text-secondary text-decoration-none text-center">
+                    </div>
+                </form>      
+                        <a href="/produtos" class="btn btn-link text-secondary text-decoration-none text-center">
                             Continuar Comprando
                         </a>
                     </div>

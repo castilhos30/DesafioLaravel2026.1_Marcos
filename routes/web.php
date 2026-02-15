@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
+use App\Models\Product;
+use App\Http\Controllers\CarrinhoController;
+use App\Http\Controllers\PagSeguroController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,7 +27,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 Route::get('/produtos', function () {
-    return view('pagina_produtos');
+    $products = Product::all();
+    return view('pagina_produtos', compact('products'));
+
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -35,30 +40,14 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/carrinho', function () {
-    $carrinho = [
-        [
-            'nome' => 'SLA',
-            'categoria' => 'Peças',
-            'preco' => 3990.00,
-            'quantidade' => 1,
-            'foto' => null
-        ],
-        [
-            'nome' => 'Volante Esportivo',
-            'categoria' => 'Acessórios',
-            'preco' => 549.90,
-            'quantidade' => 2,
-            'foto' => null
-        ]
-    ];
-    $total = 0;
-    foreach($carrinho as $item) {
-        $total += $item['preco'] * $item['quantidade'];
-    }
-    return view('carrinho', compact('carrinho', 'total'));
+    return view('carrinho', compact('carrinho'));
 })->name('carrinho');
 
 Route::get('/carrinho', [ProductsController::class, 'carrinho'])->name('carrinho');
 Route::get('/add-to-cart/{id}', [ProductsController::class, 'adicionarAoCarrinho'])->name('add_to_cart');
 
+Route::get('/', [CarrinhoController::class, 'index'])->name('home');
+Route::get('/erro-pagamento', [CarrinhoController::class, 'purchaseErro']);
+
+Route::post('/checkout', [PagSeguroController::class, 'createCheckout']);
 require __DIR__.'/auth.php';
