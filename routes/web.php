@@ -50,4 +50,8 @@ Route::get('/', [CarrinhoController::class, 'index'])->name('home');
 Route::get('/erro-pagamento', [CarrinhoController::class, 'purchaseErro']);
 
 Route::post('/checkout', [PagSeguroController::class, 'createCheckout']);
+Route::get('/visualizar-exemplo', function () {
+    return view('produto_individual');
+});
+
 require __DIR__.'/auth.php';
