@@ -9,21 +9,25 @@
     
     <style>
         body {
-            background-color: #121212;
+            background-color: #111827 ;
             color: #e0e0e0;
             font-family: 'Inter', sans-serif;
+        }
+        .navbar{
+            background-color: #1f2937 !important; 
+            border-bottom: 2px solid #333 !important;
         }
 
        
         .card-dark {
-            background-color: #1e1e1e;
+            background-color:  #1f2937;
             border: 1px solid #333;
             border-radius: 12px;
         }
 
         
         .form-control-dark {
-            background-color: #252525;
+            background-color: #1f2937;
             border: 1px solid #333;
             color: #fff;
         }
@@ -88,6 +92,15 @@
             transform: scale(1.02);
             color: #fff;
         }
+
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.no-spinners {
+    -moz-appearance: textfield;
+}
     </style>
 </head>
 <body>
@@ -104,81 +117,146 @@
     <div class="container pb-5">
         <div class="row g-4">
             
+            @php $total = 0; @endphp
+
             <div class="col-lg-8">
     
-    @if(count($carrinho) > 0)
-        
-        @foreach($carrinho  as $product) <div class="card card-dark mb-3 p-3">
-    <div class="d-flex align-items-center gap-3">
-        <div class="cart-img-container flex-shrink-0">
-            @if($product['foto'])
-                <img src="{{ asset('storage/' . $product['foto']) }}" width="80" class="rounded">
+            @if(count($carrinho) > 0)
+                
+                @foreach($carrinho as $product)
+                    
+                    @php 
+                        $subtotal = $product['preco'] * $product['quantidade'];
+                        $total += $subtotal;
+                    @endphp
+
+                    <div class="card card-dark mb-3 p-3">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="cart-img-container flex-shrink-0">
+                                @if($product['foto'])
+                                    <img src="{{ asset('storage/' . $product['foto']) }}" width="80" class="rounded">
+                                @else
+                                    <i class="bi bi-box-seam-fill fs-2"></i>
+                                @endif
+                            </div>
+                            
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="fw-bold text-white mb-1">{{ $product['nome'] }}</h5>
+                                    <form action="{{ route('carrinho.remover', $product['id']) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                    <button type="submit" class="btn btn-link text-danger p-0 text-decoration-none">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                    </form>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-end mt-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="text-white me-2">Qtd:</span>
+
+                                        <form action="{{ route('carrinho.atualizar', $product['id']) }}" method="POST" id="form-qtd-{{ $product['id'] }}">
+                                            @csrf
+                                            @method('PATCH')
+                                            
+                                            @php 
+                                                $estoque = \App\Models\Product::find($product['id'])->quantidade; 
+                                            @endphp
+
+                                            <div class="input-group input-group-sm" style="width: 120px;">
+                                                
+                                                <button type="button" class="btn btn-outline-secondary text-white border-secondary" 
+                                                        onclick="alterarQuantidade({{ $product['id'] }}, -1)">
+                                                    <i class="bi bi-dash"></i>
+                                                </button>
+
+                                                <input type="number" 
+                                                    id="input-qtd-{{ $product['id'] }}"
+                                                    name="quantidade" 
+                                                    value="{{ $product['quantidade'] }}" 
+                                                    min="1" 
+                                                    max="{{ $estoque }}" 
+                                                    class="form-control text-center bg-dark text-white border-secondary no-spinners"
+                                                    readonly>
+
+                                                <button type="button" class="btn btn-outline-secondary text-white border-secondary" 
+                                                        onclick="alterarQuantidade({{ $product['id'] }}, 1)">
+                                                    <i class="bi bi-plus"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                        
+                                        @if($product['quantidade'] >= $estoque)
+                                            <small class="text-danger ms-2" style="font-size: 0.7rem;">Máx</small>
+                                        @endif
+                                    </div>
+
+                                    <div class="text-end">
+                                        <small class="text-secondary d-block">Unit: R$ {{ number_format($product['preco'], 2, ',', '') }}</small>
+                                        <span class="text-neon fs-5">
+                                            R$ {{ number_format($subtotal, 2, ',', '') }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
             @else
-                <i class="bi bi-box-seam-fill fs-2"></i>
+                <div class="alert alert-warning">Seu carrinho está vazio.</div>
             @endif
-        </div>
-        
-        <div class="flex-grow-1">
-            <div class="d-flex justify-content-between">
-                <h5 class="fw-bold text-white mb-1">{{ $product['nome'] }}</h5>
-                <a href="#" class="btn btn-link text-danger p-0 text-decoration-none">
-                    <i class="bi bi-trash"></i>
-                </a>
+
             </div>
             
-            <div class="d-flex justify-content-between align-items-end mt-3">
-                <div class="d-flex align-items-center gap-2">
-                    <span class="text-white">Qtd: {{ $product['quantidade'] }}</span>
-                </div>
-                <div class="text-end">
-                    <small class="text-secondary d-block">Unit: R$ {{ number_format($product['preco'], 2, '.', '') }}</small>
-                    <span class="text-neon fs-5">
-                        R$ {{ number_format($product['preco'] * $product['quantidade'], 2, '.', '') }}
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
-
-    @else
-        <div class="alert alert-warning">Seu carrinho está vazio.</div>
-    @endif
-
-</div>
             <div class="col-lg-4">
                 <div class="card card-dark p-4 position-sticky" style="top: 20px;">
                     <h4 class="fw-bold text-white mb-4">Resumo do Pedido</h4>
 
-    
                     <hr class="border-secondary opacity-25">
 
                     <div class="d-flex justify-content-between mb-4 align-items-center">
                         <span class="fs-5 fw-bold text-white">Total</span>
-                        <span class="fs-2 text-neon">R$ {{ number_format($product['preco'] * $product['quantidade'], 2, '.', '') }}</span>
-                    </div>
-                <form action="/checkout" method="POST">
-                    @csrf
-                   
-                    
-                    <div class="d-grid gap-2">
-                         <input type="hidden" name="itens" value="{{ json_encode($carrinho) }}">
-                        <button type="submit" class="btn btn-checkout rounded-pill shadow-lg">
-                            Finalizar Compra
-                        </button>
-                    </div>
-                </form>      
-                        <a href="/produtos" class="btn btn-link text-secondary text-decoration-none text-center">
-                            Continuar Comprando
-                        </a>
+                        <span class="fs-2 text-neon">R$ {{ number_format($total, 2, ',', '') }}</span>
                     </div>
 
+                    <form action="/checkout" method="POST">
+                        @csrf
+                        
+                        <div class="d-grid gap-2">
+                            <input type="hidden" name="itens" value="{{ json_encode($carrinho) }}">
+                            
+                            <button type="submit" class="btn btn-checkout rounded-pill shadow-lg" {{ $total == 0 ? 'disabled' : '' }}>
+                                Finalizar Compra
+                            </button>
+                        </div>
+                    </form>      
+                    
+                    <a href="/produtos" class="btn btn-link text-secondary text-decoration-none text-center mt-3 d-block">
+                        Continuar Comprando
+                    </a>
                 </div>
             </div>
 
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <script>function alterarQuantidade(id, mudanca) {
+        let input = document.getElementById('input-qtd-' + id);
+        let form = document.getElementById('form-qtd-' + id);
+        let valorAtual = parseInt(input.value);
+        let max = parseInt(input.getAttribute('max'));
+        let min = parseInt(input.getAttribute('min'));
+        let novoValor = valorAtual + mudanca;
+        if (novoValor >= min && novoValor <= max) {
+            input.value = novoValor;
+            form.submit(); 
+        }
+    }
+    </script>
 </body>
 </html>

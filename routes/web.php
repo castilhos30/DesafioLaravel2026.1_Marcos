@@ -44,9 +44,15 @@ Route::middleware('auth')->group(function () {
     });
 
 
-Route::get('/home', function () {
-    return view('home');
+Route::get('/', function () {
+    $products = Product::all();
+   return view('home', compact('products'));
 })->middleware(['auth', 'verified'])->name('home');
+
+Route::get('/produto_individual/{id}', function ($id) {
+    $product = Product::findOrFail($id);
+    return view('produto_individual', compact('product'));
+})->middleware(['auth', 'verified'])->name('produto_individual');
 
 
 
@@ -56,13 +62,11 @@ Route::get('/home', function () {
 });
 Route::get('/produtos', function () {
     $products = Product::all();
-    return view('pagina_produtos', compact('products'));
-
-});
+    return view('pagina_produtos', compact('products'));})->name('produtos');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/productslist', [ProductsController::class, 'index'])->name('products.index');
-    Route::post('/productslist', [ProductsController::class, 'store'])->name('products.store'); // Agora o nome bate!
+    Route::post('/productslist', [ProductsController::class, 'store'])->name('products.store'); 
     Route::put('/productslist/{product}', [ProductsController::class, 'update'])->name('products.update');
     Route::delete('/productslist/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
 });
@@ -72,9 +76,12 @@ Route::get('/carrinho', function () {
 })->name('carrinho');
 
 Route::get('/carrinho', [ProductsController::class, 'carrinho'])->name('carrinho');
-Route::get('/add-to-cart/{id}', [ProductsController::class, 'adicionarAoCarrinho'])->name('add_to_cart');
+Route::match(['get', 'post'], '/add-to-cart/{id}', [ProductsController::class, 'adicionarAoCarrinho'])->name('add_to_cart');
+Route::delete('/carrinho/remover/{id}', [CarrinhoController::class, 'remover'])->name('carrinho.remover');
+Route::patch('/carrinho/atualizar/{id}', [ProductsController::class, 'atualizarCarrinho'])->name('carrinho.atualizar');
 
-Route::get('/', [CarrinhoController::class, 'index'])->name('home');
+
+
 Route::get('/erro-pagamento', [CarrinhoController::class, 'purchaseErro']);
 
 Route::post('/checkout', [PagSeguroController::class, 'createCheckout']);

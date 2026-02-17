@@ -4,34 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RPM Motos - Catálogo</title>
+
+ <x-app-layout>   
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <style>
         body {
-            background-color: #121212;
+            background-color: #111827 ;
             color: #e0e0e0;
             font-family: 'Inter', sans-serif;
         }
 
-        .navbar-store {
-            background-color: rgba(18, 18, 18, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #333;
+        nav, nav[class*="bg-white"] {
+            background-color: #1f2937 !important; 
+            border-bottom: 1px solid #374151 !important;
+        }
+        nav a, nav div, nav span { 
+            color: #e5e7eb !important; 
+            text-decoration: none !important; 
+        }
+        
+        nav button.bg-white, input.bg-white {
+            background-color: #1f2937 !important; 
+            border: 1px solid #374151 !important;
+            color: #e5e7eb !important; 
         }
 
         .search-input {
-            background-color: #1e1e1e;
+            background-color: #FFFFFF;
             border: 1px solid #333;
             color: #fff;
             padding: 10px 20px;
             border-radius: 30px;
-        }
-        .search-input:focus {
-            background-color: #252525;
-            border-color: #2ecc71;
-            box-shadow: none;
-            color: #fff;
         }
         .filter-select {
             background-color: #1e1e1e;
@@ -74,8 +79,6 @@
             color: #555;
             transform: scale(1.1);
         }
-        
-        /* Ajuste para imagem real */
         .product-img {
             width: 100%;
             height: 100%;
@@ -99,8 +102,8 @@
         }
 
         .btn-comprar {
-            background-color: #2ecc71;
-            color: #000;
+            background: linear-gradient(135deg, #AE171C 0%, #d62d35 100%);
+            color: #FFFFFF;
             font-weight: bold;
             border-radius: 50px;
             border: none;
@@ -116,44 +119,12 @@
     </style>
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-dark navbar-store sticky-top py-3">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-4" href="#">
-                <img src="https://t4.ftcdn.net/jpg/16/65/65/33/360_F_1665653395_iWwcbFAXRQ9yAAgGpVKGxTe3pHxsizhQ.jpg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top me-2">
-                RPM Motos
-            </a>
-            
-            <div class="d-none d-lg-block mx-auto" style="width: 40%;">
-                <form class="position-relative">
-                    <input type="text" class="form-control search-input" placeholder="O que você procura hoje?">
-                    <button type="submit" class="btn position-absolute top-50 end-0 translate-middle-y me-2 text-muted">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </form>
-            </div>
-
-            <div class="d-flex align-items-center gap-3">
-                <a href="{{ route('carrinho') }}" class="btn btn-outline-light position-relative border-0">
-                    <i class="bi bi-cart3 fs-4"></i>
-                    @if(session('cart'))
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
-                            {{ count(session('cart')) }}
-                        </span>
-                    @endif
-                </a>
-                <a href="#" class="btn btn-outline-light border-0"><i class="bi bi-person-circle fs-4"></i></a>
-            </div>
-        </div>
-    </nav>
-
     <div class="container mt-5">
         <div class="row align-items-center mb-5">
             <div class="col-md-6">
                 <h1 class="fw-bold text-white mb-0">Catálogo</h1>
                 <p class="text-secondary mt-1">Encontre as melhores peças para o seu projeto.</p>
             </div>
-            
             <div class="col-md-6">
                 <div class="d-flex gap-2 justify-content-md-end">
                     <select class="form-select filter-select w-auto">
@@ -170,7 +141,7 @@
 
             @forelse($products as $product)
                 <div class="col">
-                    <div class="product-card h-100">
+                    <div class="product-card h-100" onclick="window.location='{{ route('produto_individual', $product->id) }}'">
                         <div class="img-container">
                             @if($product->foto)
                                 <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nome }}" class="product-img">
@@ -187,11 +158,6 @@
                                 <div class="d-flex justify-content-between align-items-end">
                                     <span class="price-main">R$ {{ number_format($product->preco, 2, ',', '.') }}</span>
                                 </div>
-                                
-                                <small class="text-secondary d-block mt-2">
-                                    Em até 10x de R$ {{ number_format($product->preco / 10, 2, ',', '.') }}
-                                </small>
-
                                 <a href="{{ route('add_to_cart', $product->id) }}" class="btn btn-comprar shadow-sm">
                                     <i class="bi bi-bag-plus me-1"></i> Comprar
                                 </a>
@@ -221,3 +187,4 @@
     
 </body>
 </html>
+</x-app-layout>

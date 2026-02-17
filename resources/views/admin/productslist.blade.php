@@ -35,6 +35,7 @@
             <tr>
                 <th>ID</th>
                 <th>Nome</th>
+                <th>Autor</th>
                 <th>Categoria</th>
                 <th>Preço</th>
                 <th>Qtd</th>
@@ -46,6 +47,7 @@
             <tr>
                 <td>{{ $product->id }}</td>
                 <td>{{ $product->nome }}</td>
+                <td>{{ $product->user->name}}</td>
                 <td><span class="badge bg-secondary">{{ $product->categorias }}</span></td>
                 <td>R$ {{ number_format($product->preco, 2, ',', '.') }}</td>
                 <td>{{ $product->quantidade }}</td>
@@ -87,15 +89,23 @@
                     <label class="fw-bold text-muted small">NOME</label>
                     <p class="fs-5 mb-0">{{ $product->nome }}</p>
                 </div>
+
+                <div class="col-6 mb-3 border-bottom pb-2">
+                        <label class="fw-bold text-muted small">AUTOR</label>
+                        <p class="mb-0">{{ $product->user->name }}</p>
+                    </div>
+
                 <div class="mb-3 border-bottom pb-2">
                     <label class="fw-bold text-muted small">DESCRIÇÃO</label>
                     <p class="mb-0">{{ $product->descricao ?? 'Sem descrição.' }}</p>
                 </div>
+
                 <div class="row">
                     <div class="col-6 mb-3 border-bottom pb-2">
                         <label class="fw-bold text-muted small">CATEGORIA</label>
                         <p class="mb-0"><span class="badge bg-primary">{{ $product->categorias }}</span></p>
                     </div>
+
                     <div class="col-6 mb-3 border-bottom pb-2">
                         <label class="fw-bold text-muted small">ESTOQUE</label>
                         <p class="mb-0">{{ $product->quantidade }} unidades</p>
