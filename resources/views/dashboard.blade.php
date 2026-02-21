@@ -16,6 +16,12 @@
                         {!! $chart->renderHtml() !!}
                     </div>
                 </div>
+
+                <div style="margin: 20px 0;">
+                    <a href="{{ route('historico.pdf') }}" style="background-color: #AE171C; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                        Baixar Relatório em PDF
+                    </a>
+</div>
             </div>
         </div>
     </div>

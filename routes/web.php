@@ -11,6 +11,8 @@ use App\Http\Controllers\PagSeguroController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ChartsController;
+use App\Models\Sale;
+use App\Http\Controllers\ReportController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -101,4 +103,7 @@ Route::get('/visualizar-exemplo', function () {
 
 Route::view('/endereco', 'modalEndereco');
 Route::post('/address', [AddressController::class, 'store'])->middleware('auth')->name('address.store');
+        
+Route::get('/historico', [App\Http\Controllers\ReportController::class, 'index'])->name('historico.index');
+Route::get('/historico/pdf', [App\Http\Controllers\ReportController::class, 'baixarPdf'])->name('historico.pdf');
 require __DIR__.'/auth.php';

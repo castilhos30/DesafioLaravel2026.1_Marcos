@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Sale; // Importando o model de Vendas que acabamos de criar
+use App\Models\Sale; 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
