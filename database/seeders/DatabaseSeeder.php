@@ -4,6 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Admin;
+use App\Models\Product;
+use App\Models\Sale;
+use Illuminate\Support\Facades\Hash;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,14 +30,12 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        Product::create([
-            'user_id' => $user->id,
-            'nome' => 'Kit Turbo Garrett GT35',
-            'descricao' => 'Kit turbo completo para alta performance.',
-            'preco' => 3990.00,
-            'quantidade' => 5,
-            'categorias' => 'Peça', 
-            'foto' => null
+
+        User::factory(10)->create();
+        Product::factory(30)->create();
+        Sale::factory(50)->create();
+        Sale::factory(10)->create([
+            'vendedor_id' => 1 
         ]);
     }
 }
