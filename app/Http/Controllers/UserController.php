@@ -5,6 +5,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Address;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminMensagemMail; 
 
 class UserController extends Controller
 {
@@ -45,7 +48,7 @@ class UserController extends Controller
             ]
         );
 
-        return redirect()->route('index'); 
+        return redirect()->route('usuarios.index'); 
     }
 
     public function store(Request $request)
@@ -83,4 +86,21 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('index');
     }
+
+    public function enviarEmail(Request $request, User $user)
+{
+    if (!auth()->user()->is_admin) {
+        abort(403);
+    }
+
+    $request->validate([
+        'assunto' => 'required|string|max:255',
+        'mensagem' => 'required|string',
+    ]);
+
+
+    Mail::to($user->email)->send(new AdminMensagemMail($request->assunto, $request->mensagem));
+
+    return redirect()->back()->with('success', 'E-mail enviado com sucesso para ' . $user->name);
+}
 }

@@ -99,7 +99,8 @@
     </table>
 
     <div class="footer">
-        Relatório gerado conforme requisitos RF008 e RF009 - DomPDF
+        <p>Code Jr - Plataforma de Compra e Venda de Produtos Usados da RPM Motos</p>
+        <p>Gerado em {{ \Carbon\Carbon::now('America/Sao_Paulo')->format('d/m/Y H:i') }}</p>
     </div>
 
 </body>

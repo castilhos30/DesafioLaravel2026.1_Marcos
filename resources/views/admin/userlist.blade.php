@@ -148,6 +148,9 @@
             <td>{{ $user->email }}</td>
             <td>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#showPostModal{{ $user->id }}">Visualizar</button>
+                @if(Auth::user()->is_admin)
+                <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#mailUserModal{{ $user->id }}">Enviar E-mail</button>
+            @endif
                 @if(Auth::id() == $user->id || Auth::user()->is_admin) 
                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPostModal{{ $user->id }}">Editar</button>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal{{ $user->id }}">Deletar</button>
@@ -379,8 +382,40 @@
     </div>
   </div>
 </div>
-@endforeach
 
+
+{{-- MODAL ENVIAR E-MAIL --}}
+
+<div class="modal fade" id="mailUserModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Enviar E-mail para: {{ $user->name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            
+            <form action="{{ route('admin.enviar_email', $user->id) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Assunto:</label>
+                        <input type="text" name="assunto" class="form-control" placeholder="Assunto do e-mail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Conteúdo da Mensagem:</label>
+                        <textarea name="mensagem" class="form-control" rows="5" placeholder="Escreva sua mensagem aqui..." required></textarea>
+                    </div>
+                </div>
+                
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Enviar Agora</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
 
 </body>
 </html>

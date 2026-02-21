@@ -26,6 +26,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
+    Route::post('/enviar-email/{user}', [App\Http\Controllers\UserController::class, 'enviarEmail'])->name('admin.enviar_email');
 });
 
 Route::middleware('auth')->group(function () {
