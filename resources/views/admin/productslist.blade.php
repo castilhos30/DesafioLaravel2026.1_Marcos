@@ -244,7 +244,7 @@
                                     <h5 class="modal-title">Editar Produto</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
-                                <form action="{{ route('products.update', $product->id) }}" method="POST">
+                                <form action="{{ route('products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <div class="modal-body text-start">
@@ -268,7 +268,7 @@
                                         
                                         <div class="mb-3">
                                             <label>Foto do Produto</label>
-                                            <input type="file" name="foto" class="form-control" accept="image/*" required>
+                                            <input type="file" name="foto" class="form-control">
                                         </div>
 
                                         <div class="row">

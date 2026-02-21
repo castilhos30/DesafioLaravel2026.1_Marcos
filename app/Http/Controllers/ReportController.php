@@ -6,6 +6,8 @@ use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\VendasExport;
 
 class ReportController extends Controller
 {
@@ -37,5 +39,15 @@ class ReportController extends Controller
 
         $pdf = Pdf::loadView('pdf.historico', compact('vendas', 'compras')); 
         return $pdf->download('historico_transacoes_completo.pdf');
+}
+
+public function baixarExcel()
+{
+   
+    if (!auth()->user()->is_admin) {
+        abort(403);
+    }
+
+    return Excel::download(new VendasExport, 'relatorio_vendas.xlsx');
 }
 }

@@ -52,15 +52,15 @@ class ProductsController extends Controller
             return redirect()->back()->with('error', 'Acesso negado.');
         }    
 
-        $data = $request->except('foto');
+      $data = $request->only(['nome', 'descricao', 'preco', 'quantidade', 'categorias']);
 
-        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
-            $caminhoFoto = $request->foto->store('produtos', 'public');
-            $data['foto'] = $caminhoFoto;
-        }
+    if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+        $data['foto'] = $request->foto->store('produtos', 'public');
+    }
 
-        $product->update($data);
-        return redirect()->route('products.index'); 
+    $product->update($data);
+    
+    return redirect()->route('products.index');
     }
 
     public function destroy(Product $product)

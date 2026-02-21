@@ -7,6 +7,11 @@
             <a href="{{ route('historico.pdf') }}" class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-500 active:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition ease-in-out duration-150">
                 <i class="bi bi-file-earmark-pdf-fill mr-2"></i> Gerar Relatório PDF
             </a>
+            @if(Auth::user()->is_admin)
+            <a href="{{ route('historico.excel') }}" class="inline-flex items-center px-4 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-500 active:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition ease-in-out duration-150">
+                <i class="bi bi-file-earmark-excel mr-2"></i> Exportar Excel (XLSX)
+            </a>
+@endif
         </div>
     </x-slot>
 

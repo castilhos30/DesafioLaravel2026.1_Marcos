@@ -13,6 +13,8 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ChartsController;
 use App\Models\Sale;
 use App\Http\Controllers\ReportController;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\VendasExport;
 
 Route::get('/', function () {
     return view('welcome');
@@ -27,6 +29,7 @@ Route::prefix('admin')->group(function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
     Route::post('/enviar-email/{user}', [App\Http\Controllers\UserController::class, 'enviarEmail'])->name('admin.enviar_email');
+    Route::get('/historico/excel', [ReportController::class, 'baixarExcel'])->name('historico.excel');
 });
 
 Route::middleware('auth')->group(function () {
