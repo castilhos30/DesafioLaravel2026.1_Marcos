@@ -8,6 +8,8 @@ use App\Http\Controllers\ProductsController;
 use App\Models\Product;
 use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\PagSeguroController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\AddressController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -89,4 +91,6 @@ Route::get('/visualizar-exemplo', function () {
     return view('produto_individual');
 });
 
+Route::view('/teste', 'modalEndereco');
+Route::post('/address', [AddressController::class, 'store'])->middleware('auth')->name('address.store');
 require __DIR__.'/auth.php';
