@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AddressController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,4 +30,6 @@ Route::put('/userlist/{user}',[UserController::class, 'update'])->name('update')
 Route::post('/userlist',[UserController::class, 'store'])->name('store');
 Route::delete('/userlist/{user}',[UserController::class, 'destroy'])->name('destroy');
 
+Route::view('/teste', 'modalEndereco');
+Route::post('/address', [AddressController::class, 'store'])->middleware('auth')->name('address.store');
 require __DIR__.'/auth.php';
