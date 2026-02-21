@@ -29,8 +29,10 @@
             <td>{{ $user->email }}</td>
             <td>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#showPostModal{{ $user->id }}">Visualizar</button>
+                @if(Auth::id() == $user->id || Auth::user()->is_admin) 
                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editPostModal{{ $user->id }}">Editar</button>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePostModal{{ $user->id }}">Deletar</button>
+                @endif
             </td>
         </tr>
     @endforeach
@@ -41,90 +43,201 @@
 {{-- MODAL Vizualizar --}}
 
    @foreach ($users as $user)
-    <div class="modal" id="showPostModal{{ $user->id }}" tabindex="-1">  
+    <div class="modal fade" id="showPostModal{{ $user->id }}" tabindex="-1">  
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Visualizar Usuário</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                
+                <div class="modal-body text-center">
                    <form action="">
-                    <p>Nome:</p>
-                    <p>{{ $user->name }}</p>
+                    <p class="fw-bold">Foto:</p>
+                    
+                    <img src="{{ $user->foto }}" alt="Foto de Perfil" style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin: 0 auto;">
+                    
+                    <p class="mt-3">Nome:</p>
+                    <p class="fw-bold">{{ $user->name }}</p>
+                    
                     <p>Email:</p>
-                    <p>{{ $user->email }}</p>
+                    <p class="fw-bold">{{ $user->email }}</p>
+                    
+                    <hr>
+                    
+                    <p>CEP:</p>
+                    <p class="fw-bold">{{ $user->address->cep ?? 'Não informado' }}</p>
+                    
+                    <p>Logradouro:</p>
+                    <p class="fw-bold">{{ $user->address->logradouro ?? 'Não informado' }}</p>
+                    
+                    <p>Número:</p>
+                    <p class="fw-bold">{{ $user->address->numero ?? 'Não informado' }}</p>
+                    
+                    <p>Complemento:</p>
+                    <p class="fw-bold">{{ $user->address->complemento ?? 'Não informado' }}</p>
+                    
+                    <p>Bairro:</p>
+                    <p class="fw-bold">{{ $user->address->bairro ?? 'Não informado' }}</p>
+                    
+                    <p>Cidade:</p>
+                    <p class="fw-bold">{{ $user->address->cidade ?? 'Não informado' }}</p>
+                    
+                    <p>Estado:</p>
+                    <p class="fw-bold">{{ $user->address->estado ?? 'Não informado' }}</p>
                      </form>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Salvar</button>
                 </div>
             </div>
         </div>
     </div>
-   @endforeach
+@endforeach
 
    {{-- MODAL Editar --}}
+
 @foreach ($users as $user)
-   <div class="modal" id="editPostModal{{ $user->id }}" tabindex="-1">
+<div class="modal fade" id="editPostModal{{ $user->id }}" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Editar Usuário</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form action="{{ route('update', $user->id) }}" method="POST">
+      
+      <form action="{{ route('update', $user->id) }}" method="POST" enctype="multipart/form-data">
           @csrf
           @method('PUT')
-          <p>Nome:</p>
-          <input type="text" name="name" value="{{ $user->name }}" >
-          <p>Email:</p>
-          <input type="email" name="email" value="{{ $user->email }}" >
-          <p>Senha:</p>
-          <input type="password" name="password" value="{{ $user->password }}" >
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-primary">Salvar</button>
-      </div>
-          </form> 
+          
+          <div class="modal-body text-center">
+            
+            <div class="mb-3 d-flex justify-content-center flex-column align-items-center">
+                <p class="fw-bold mb-1">Foto Atual:</p>
+                @if($user->foto)
+                    <img src="{{ asset($user->foto) }}" 
+                         alt="Foto de Perfil" 
+                         style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin-bottom: 10px;">
+                @else
+                    <div style="width: 100px; height: 100px; border-radius: 50%; background-color: #ccc; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                        <span>Sem foto</span>
+                    </div>
+                @endif
+                
+                <input type="file" name="foto" class="form-control form-control-sm w-75">
+            </div>
+
+            <p class="fw-bold mt-3">Nome:</p>
+            <input type="text" name="name" value="{{ $user->name }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Email:</p>
+            <input type="email" name="email" value="{{ $user->email }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Senha (Deixe em branco para manter):</p>
+            <input type="password" name="password" class="form-control text-center">
+
+            <hr>
+
+            <p class="fw-bold">CEP:</p>
+            <input type="text" name="cep" value="{{ $user->address->cep ?? '' }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Logradouro:</p>
+            <input type="text" name="logradouro" value="{{ $user->address->logradouro ?? '' }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Número:</p>
+            <input type="text" name="numero" value="{{ $user->address->numero ?? '' }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Complemento:</p>
+            <input type="text" name="complemento" value="{{ $user->address->complemento ?? '' }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Bairro:</p>
+            <input type="text" name="bairro" value="{{ $user->address->bairro ?? '' }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Cidade:</p>
+            <input type="text" name="cidade" value="{{ $user->address->cidade ?? '' }}" class="form-control text-center">
+            
+            <p class="fw-bold mt-2">Estado:</p>
+            <input type="text" name="estado" value="{{ $user->address->estado ?? '' }}" class="form-control text-center">
+
+          </div>
+          
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="submit" class="btn btn-primary">Salvar</button>
+          </div>
+      </form> 
     </div>
   </div>
 </div>
 @endforeach
 
 {{-- MODAL CRIAR --}}
-<div class="modal" id="createPostModal" tabindex="-1">
+<div class="modal fade" id="createPostModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Criar Usuário</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form action="{{ route('store')}}" method="POST">
-                    @csrf
-                    <p>Nome:</p>
-                    <input type="text" name="name">
-                    <p>Email:</p>
-                    <input type="email" name="email">
-                    <p>Senha:</p>
-                    <input type="password" name="password">
             
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-primary">Salvar</button>
-                </form>
-            </div>
+            <form action="{{ route('store')}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                
+                <div class="modal-body text-center">
+                    
+                    <div class="mb-3 d-flex justify-content-center flex-column align-items-center">
+                        <div style="width: 100px; height: 100px; border-radius: 50%; background-color: #e9ecef; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; font-size: 2rem; color: #6c757d;">
+                            <i class="bi bi-person-plus-fill"></i>
+                        </div>
+                        <label for="foto" class="form-label fw-bold">Escolher Foto</label>
+                        <input type="file" class="form-control form-control-sm w-75" name="foto" id="foto" accept="image/*">
+                    </div>
+
+                    <p class="fw-bold mt-3">Nome:</p>
+                    <input type="text" name="name" class="form-control text-center" placeholder="Nome completo">
+
+                    <p class="fw-bold mt-2">Email:</p>
+                    <input type="email" name="email" class="form-control text-center" placeholder="exemplo@email.com">
+
+                    <p class="fw-bold mt-2">Senha:</p>
+                    <input type="password" name="password" class="form-control text-center" placeholder="******">
+
+                    <hr>
+
+                    <p class="fw-bold">CEP:</p>
+                    <input type="text" name="cep" class="form-control text-center" placeholder="00000-000">
+
+                    <p class="fw-bold mt-2">Logradouro:</p>
+                    <input type="text" name="logradouro" class="form-control text-center" placeholder="Rua, Av...">
+
+                    <p class="fw-bold mt-2">Número:</p>
+                    <input type="text" name="numero" class="form-control text-center">
+
+                    <p class="fw-bold mt-2">Complemento:</p>
+                    <input type="text" name="complemento" class="form-control text-center" placeholder="Apto, Bloco...">
+
+                    <p class="fw-bold mt-2">Bairro:</p>
+                    <input type="text" name="bairro" class="form-control text-center">
+
+                    <p class="fw-bold mt-2">Cidade:</p>
+                    <input type="text" name="cidade" class="form-control text-center">
+
+                    <p class="fw-bold mt-2">Estado:</p>
+                    <input type="text" name="estado" class="form-control text-center" placeholder="UF">
+                </div>
+
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
 {{-- MODAL DELETAr --}}
-
+@foreach ($users as $user)
 <div class="modal" id="deletePostModal{{ $user->id }}" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -147,6 +260,7 @@
     </div>
   </div>
 </div>
+@endforeach
 
 
 </body>
