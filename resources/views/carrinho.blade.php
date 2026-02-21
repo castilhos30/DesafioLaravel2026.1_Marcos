@@ -220,7 +220,6 @@
                         <span class="fs-5 fw-bold text-white">Total</span>
                         <span class="fs-2 text-neon">R$ {{ number_format($total, 2, ',', '') }}</span>
                     </div>
-
                     <form action="/checkout" method="POST">
                         @csrf
                         

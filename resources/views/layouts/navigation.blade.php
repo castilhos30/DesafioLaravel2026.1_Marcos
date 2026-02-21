@@ -24,6 +24,14 @@
                         {{ __('Produtos') }}
                     </x-nav-link>
 
+                    <x-nav-link :href="route('usuarios.index')" :active="request()->routeIs('usuarios.index')">
+                        {{ __('Usuários') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                        {{ __('Tabela de Produtos') }}
+                    </x-nav-link>
+
                 </div>
             </div>
 
