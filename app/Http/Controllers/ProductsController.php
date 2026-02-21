@@ -48,6 +48,10 @@ class ProductsController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        if (!Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'Acesso negado.');
+        }    
+
         $data = $request->except('foto');
 
         if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
@@ -61,6 +65,10 @@ class ProductsController extends Controller
 
     public function destroy(Product $product)
     {
+        if (!Auth::user()->is_admin) {
+            return redirect()->back()->with('error', 'Acesso negado.');
+        }
+
         $product->delete();
         return redirect()->route('products.index');
     }

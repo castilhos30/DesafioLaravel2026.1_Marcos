@@ -167,7 +167,7 @@
                             data-bs-toggle="modal" data-bs-target="#viewProductModal{{ $product->id }}" title="Ver Detalhes">
                         Ver
                     </button>
-
+ @if(Auth::id() == $product->user_id || Auth::user()->is_admin) 
                     <button type="button" class="btn btn-warning btn-sm" 
                             data-bs-toggle="modal" data-bs-target="#editProductModal{{ $product->id }}" title="Editar">
                         Editar
@@ -177,7 +177,7 @@
                             data-bs-toggle="modal" data-bs-target="#deleteProductModal{{ $product->id }}" title="Excluir">
                         Excluir
                     </button>
-
+@endif
 <!--Modal de Visualizar-->
 
     <div class="modal fade" id="viewProductModal{{ $product->id }}" tabindex="-1" aria-hidden="true">

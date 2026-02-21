@@ -31,6 +31,9 @@
                     <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                         {{ __('Tabela de Produtos') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('historico.index')" :active="request()->routeIs('historico.index')">
+                        {{ __('Histórico') }}
+                    </x-nav-link>
 
                 </div>
             </div>
