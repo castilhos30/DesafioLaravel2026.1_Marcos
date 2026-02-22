@@ -47,7 +47,7 @@
             <tr>
                 <td>
                     @if($compra->product && $compra->product->foto)
-                        <img src="{{ public_path('storage/' . $compra->product->foto) }}" class="img-produto">
+                        <img src="{{ public_path($compra->product->foto) }}" class="img-produto">
                     @else
                         <span style="color: #ccc;">Sem foto</span>
                     @endif
@@ -81,7 +81,7 @@
             <tr>
                 <td>
                     @if($venda->product && $venda->product->foto)
-                        <img src="{{ public_path('storage/' . $venda->product->foto) }}" class="img-produto">
+                        <img src="{{ public_path($venda->product->foto) }}" class="img-produto">
                     @else
                         <span style="color: #ccc;">Sem foto</span>
                     @endif

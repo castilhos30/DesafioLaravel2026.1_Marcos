@@ -42,7 +42,7 @@
                             @forelse($compras as $compra)
                                 <tr>
                                     <td class="px-6 py-4">
-                                        <img src="{{ asset('storage/' . ($compra->product->foto ?? 'default.jpg')) }}" class="h-10 w-10 rounded-full object-cover">
+                                        <img src="{{ asset(($compra->product->foto ?? 'default.jpg')) }}" class="h-10 w-10 rounded-full object-cover">
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">{{ $compra->product->nome ?? 'N/A' }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $compra->vendedor->name ?? 'N/A' }}</td>
@@ -80,7 +80,7 @@
                             @forelse($vendas as $venda)
                                 <tr>
                                     <td class="px-6 py-4">
-                                        <img src="{{ asset('storage/' . ($venda->product->foto ?? 'default.jpg')) }}" class="h-10 w-10 rounded-full object-cover">
+                                        <img src="{{ asset(($venda->product->foto ?? 'default.jpg')) }}" class="h-10 w-10 rounded-full object-cover">
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">{{ $venda->product->nome ?? 'N/A' }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{{ $venda->comprador->name ?? 'N/A' }}</td>

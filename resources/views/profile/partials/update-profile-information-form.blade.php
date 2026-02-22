@@ -1,64 +1,100 @@
 <section>
     <header>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            {{ __('Profile Information') }}
+            {{ __('Informações do Perfil') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {{ __("Update your account's profile information and email address.") }}
+            {{ __("Visualize suas informações pessoais e endereço cadastrado.") }}
         </p>
     </header>
 
-    <form id="send-verification" method="post" action="{{ route('verification.send') }}">
-        @csrf
-    </form>
+    <div class="mt-6 space-y-6">
+        <div>
+            <x-input-label :value="__('Foto de Perfil')" />
+            <div class="mt-2">
+                <img class="h-24 w-24 object-cover rounded-full border-2 border-indigo-500" 
+                     src="{{ $user->foto ? asset($user->foto) : asset('assets/imagens/default-avatar.png') }}" 
+                     alt="{{ $user->name }}">
+            </div>
+        </div>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
-        @csrf
-        @method('patch')
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <x-input-label :value="__('Nome Completo')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->name }}
+                </p>
+            </div>
+
+            <div>
+                <x-input-label :value="__('CPF')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->cpf ?? 'Não informado' }}
+                </p>
+            </div>
+
+            <div>
+                <x-input-label :value="__('Telefone')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->telefone ?? 'Não informado' }}
+                </p>
+            </div>
+
+            <div>
+                <x-input-label :value="__('Saldo')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm" style="color: {{ $user->saldo >= 0 ? '#2ecc71' : '#e74c3c' }};">
+                    R$ {{ number_format($user->saldo, 2, ',', '.') }}
+                </p>
+            </div>
+        </div>
 
         <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name', $user->name)" required autofocus autocomplete="name" />
-            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+            <x-input-label :value="__('Email')" />
+            <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                {{ $user->email }}
+            </p>
         </div>
 
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
-            <x-input-error class="mt-2" :messages="$errors->get('email')" />
+        <hr class="border-gray-700">
 
-            @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
-                <div>
-                    <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
-                        {{ __('Your email address is unverified.') }}
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+                <x-input-label :value="__('CEP')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->cep ?? '---' }}
+                </p>
+            </div>
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800">
-                            {{ __('Click here to re-send the verification email.') }}
-                        </button>
-                    </p>
-
-                    @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ __('A new verification link has been sent to your email address.') }}
-                        </p>
-                    @endif
-                </div>
-            @endif
+            <div class="md:col-span-2">
+                <x-input-label :value="__('Rua/Logradouro')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->rua ?? '---' }}
+                </p>
+            </div>
         </div>
 
-        <div class="flex items-center gap-4">
-            <x-primary-button>{{ __('Save') }}</x-primary-button>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+                <x-input-label :value="__('Bairro')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->bairro ?? '---' }}
+                </p>
+            </div>
 
-            @if (session('status') === 'profile-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-gray-600 dark:text-gray-400"
-                >{{ __('Saved.') }}</p>
-            @endif
+            <div class="md:col-span-2">
+                <x-input-label :value="__('Cidade/UF')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->cidade ?? '---' }} / {{ $user->estado ?? '--' }}
+                </p>
+            </div>
+
+            <div>
+                <x-input-label :value="__('Número')" />
+                <p class="mt-1 text-gray-800 dark:text-gray-200 p-2 bg-gray-100 dark:bg-gray-700 rounded shadow-sm">
+                    {{ $user->numero ?? 'S/N' }}
+                </p>
+            </div>
         </div>
-    </form>
+    </div>
 </section>
