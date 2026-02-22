@@ -14,9 +14,17 @@ class ProductsController extends Controller
         return view('admin.productslist', compact('products'));
     }
 
-    public function pagina_produtos() 
+    public function pagina_produtos(Request $request) 
     {
-        $products = Product::paginate(12);
+       $query = Product::query();
+        if ($request->filled('search')) {
+            $query->where('nome', 'like', '%' . $request->search . '%');
+        }
+        if ($request->filled('categoria')) {
+            $query->where('categorias', $request->categoria);
+        }
+        $products = $query->paginate(12)->withQueryString();
+
         return view('pagina_produtos', compact('products'));
     }
 

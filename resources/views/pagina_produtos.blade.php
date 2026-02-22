@@ -181,14 +181,14 @@
                     
                     <select name="categoria" class="form-select filter-select w-auto" onchange="this.form.submit()">
                         <option value="">Todas as Categorias</option>
-                        <option value="Peças" {{ request('categoria') == 'Peças' ? 'selected' : '' }}>Peças</option>
-                        <option value="Acessórios" {{ request('categoria') == 'Acessórios' ? 'selected' : '' }}>Acessórios</option>
-                        <option value="Ferramentas" {{ request('categoria') == 'Ferramentas' ? 'selected' : '' }}>Ferramentas</option>
-                        <option value="Vestuário" {{ request('categoria') == 'Vestuário' ? 'selected' : '' }}>Vestuário</option>
+                        <option value="Peça" {{ request('categoria') == 'Peça' ? 'selected' : '' }}>Peças</option>
+                        <option value="Acessório" {{ request('categoria') == 'Acessório' ? 'selected' : '' }}>Acessórios</option>
+                        <option value="Ferramenta" {{ request('categoria') == 'Ferramenta' ? 'selected' : '' }}>Ferramenta</option>
+                        <option value="Outros" {{ request('categoria') == 'Outros' ? 'selected' : '' }}>Outros</option>
                     </select>
 
-                    @if(request('search') || request('categoria'))
-                        <a href="{{ route('home') }}" class="btn btn-outline-light" style="border-radius: 8px;">Limpar</a>
+                   @if(request('search') || request('categoria'))
+                        <a href="{{ route('produtos') }}" class="btn btn-outline-light" style="border-radius: 8px;">Limpar</a>
                     @endif
                 </form>
             </div>
