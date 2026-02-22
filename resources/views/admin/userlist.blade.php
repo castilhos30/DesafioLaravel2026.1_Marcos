@@ -171,9 +171,10 @@
         </button>
     </div>
 
-<table class="table table-bordered table-hover shadow-sm">
-    <thead class="table-dark">
-        <tr>
+<div class="table-responsive">
+        <table class="table table-bordered table-hover shadow-sm" style="white-space: nowrap;">
+            <thead class="table-dark">
+                <tr>
             <th scope="col">id</th>
             <th scope="col">Nome</th>
             <th scope="col">Email</th>

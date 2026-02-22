@@ -182,9 +182,10 @@
         </div>
     @endif
 
-    <table class="table table-bordered table-hover shadow-sm">
-        <thead class="table-dark">
-            <tr>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover shadow-sm" style="white-space: nowrap;">
+            <thead class="table-dark">
+                <tr>
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Autor</th>
@@ -222,10 +223,9 @@
 @endif
 
 @endforeach
-        </tbody>
+       </tbody>
     </table>
-
-    <div class="d-flex justify-content-center mt-4 mb-5 pagination-wrapper">
+    </div> <div class="d-flex justify-content-center mt-4 mb-5 pagination-wrapper">
         {{ $products->links() }}
     </div>
 
