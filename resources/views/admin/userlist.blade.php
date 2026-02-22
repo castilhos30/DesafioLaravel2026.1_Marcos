@@ -491,6 +491,45 @@
 </div>
 @endforeach
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const cepInputs = document.querySelectorAll('input[name="cep"]');
+
+        cepInputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                let cep = this.value.replace(/\D/g, ''); 
+                
+                if (cep.length === 8) {
+                    let form = this.closest('form');
+                    let logradouroInput = form.querySelector('input[name="logradouro"]');
+                    logradouroInput.value = "Buscando...";
+                    fetch('/api/cep/' + cep)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Erro na rota');
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (!data.erro && !data.error) {
+                                form.querySelector('input[name="logradouro"]').value = data.logradouro || '';
+                                form.querySelector('input[name="bairro"]').value = data.bairro || '';
+                                form.querySelector('input[name="cidade"]').value = data.localidade || '';
+                                form.querySelector('input[name="estado"]').value = data.uf || '';
+                            } else {
+                                alert("CEP não encontrado!");
+                                logradouroInput.value = "";
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erro:', error);
+                            alert("Falha ao comunicar com a API do CEP.");
+                            logradouroInput.value = "";
+                        });
+                }
+            });
+        });
+    });
+</script>
+
 </body>
 </html>
 </x-app-layout>  

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Api\CepController;
 use App\Http\Middleware\Customer;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
@@ -67,6 +68,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     
         });
 
+});
+
+Route::prefix('api')->group(function () {
+    Route::get('/cep/{cep}', [CepController::class, 'show']);
 });
 
 require __DIR__.'/auth.php';
