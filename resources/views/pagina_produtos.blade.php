@@ -200,7 +200,7 @@
                     <div class="product-card h-100" onclick="window.location='{{ route('produto_individual', $product->id) }}'">
                         <div class="img-container">
                             @if($product->foto)
-                                <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nome }}" class="product-img">
+                                <img src="{{ asset($product->foto) }}" alt="{{ $product->nome }}" class="product-img">
                             @else
                                 <i class="bi bi-box-seam-fill fs-1"></i>
                             @endif

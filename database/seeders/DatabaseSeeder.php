@@ -16,6 +16,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        
+        
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -23,23 +25,24 @@ class DatabaseSeeder extends Seeder
             'is_admin' => false,
         ]);
 
+        User::factory(18)->create(['is_admin' => false]);
+
+        Product::factory(36)->create();
+
+
+        Sale::factory(50)->create();
+        Sale::factory(10)->create([
+            'vendedor_id' => 1 
+        ]);
+
         User::factory()->create([
-            'name' => 'Test Admin',
+            'name' => 'Test Admin', 
             'email' => 'admin@example.com',
             'password' => Hash::make('password'),
             'is_admin' => true,
         ]);
 
-       
-        User::factory(18)->create();
-        Product::factory(36)->create();
-        
-    
+     
         AdminFactory::new()->count(9)->create();
-        
-        Sale::factory(50)->create();
-        Sale::factory(10)->create([
-            'vendedor_id' => 1 
-        ]);
     }
 }

@@ -23,11 +23,36 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $nomesUser = [
+        'Marcos César', 
+        'Bruno', 
+        'Miguel', 
+        'Mickaell',
+        'Délio',
+        'Lucas',
+        'Rafael',
+        'Marcos',
+        'Breno',
+        'Bernado',
+    ];
+
+     $fotosuser = [
+        'user1.jpg',
+        'user2.jpg',
+        'user3.jpg',
+        'user4.jpg',
+        'user5.jpg',
+        'user6.jpg',
+    ];
+
+    $nomeSelecionado = $this->faker->randomElement($nomesUser);
+        $fotoSelecionada = $this->faker->randomElement($fotosuser);
         return [
-            'name' => fake()->name(),
+            'name' =>  $nomeSelecionado,
             'email' => fake()->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('password'),
             'is_admin' => 0,
+            'foto' => $fotoSelecionada,
             'cpf' => fake()->unique()->numerify('###########'),
             'telefone' => fake()->numerify('###########'),
             'data_nascimento' => fake()->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),

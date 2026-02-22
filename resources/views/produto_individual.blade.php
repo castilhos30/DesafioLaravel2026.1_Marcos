@@ -84,7 +84,7 @@
                         <div class="product-image-container w-100 shadow-sm">
                             <div class="text-center">
                                 @if($product->foto)
-                                    <img src="{{ asset('storage/' . $product->foto) }}" alt="{{ $product->nome }}" class="img-fluid rounded" style="height: 100%;"> 
+                                    <img src="{{ asset($product->foto) }}" alt="{{ $product->nome }}" class="img-fluid rounded" style="height: 100%;"> 
                                 @else
                                     <i class="bi bi-image fs-1"></i>
                                     <p class="mt-3 text-white-50 fw-light">Sem Imagem</p>
