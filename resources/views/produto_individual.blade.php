@@ -131,7 +131,7 @@
                                 </div>
                             </div>
                         </div>
-
+                         @if(!Auth::user()->is_admin)
                         <form action="{{ route('add_to_cart', $product->id) }}" method="POST">
                             @csrf
                             <div class="mb-4">
@@ -163,7 +163,6 @@
 
                             <div class="d-grid gap-3 d-md-flex justify-content-md-start">
                                 @if($product->quantidade > 0)
-                                @if(!Auth::user()->is_admin)
                                 <form action="{{ route('add_to_cart', $product->id) }}" method="POST">
                                     @csrf
                                     <button class="btn btn-success btn-lg px-5 fw-bold py-3 flex-grow-1" type="submit">
