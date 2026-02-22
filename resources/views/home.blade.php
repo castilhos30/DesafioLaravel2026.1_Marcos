@@ -166,11 +166,13 @@
                                 
                                 <div class="mt-auto">
                                     <p class="price-tag">R$ {{ number_format($product->preco, 2, ',', '.') }}</p>
+                                 @if(Auth::check() && !Auth::user()->is_admin)
                                     <a href="#"> 
                                         <button class="btn btn-comprar">
                                             <i class="fa-solid fa-cart-shopping me-2"></i> Comprar
                                         </button>
                                     </a>
+                                @endif    
                                 </div>
                             </div>
                         </div>

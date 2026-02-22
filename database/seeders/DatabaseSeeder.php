@@ -25,15 +25,14 @@ class DatabaseSeeder extends Seeder
             'is_admin' => false,
         ]);
 
-        User::factory(18)->create(['is_admin' => false]);
-
-        Product::factory(36)->create();
-
-
-        Sale::factory(50)->create();
-        Sale::factory(10)->create([
-            'vendedor_id' => 1 
+        $this->call([
+            UserSeeder::class,
+            ProductSeeder::class,
+            SaleSeeder::class,
+            AdminSeeder::class,
         ]);
+
+        
 
         User::factory()->create([
             'name' => 'Test Admin', 
@@ -42,7 +41,6 @@ class DatabaseSeeder extends Seeder
             'is_admin' => true,
         ]);
 
-     
-        AdminFactory::new()->count(9)->create();
+
     }
 }

@@ -22,9 +22,15 @@
             
             <div class="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
                 <header class="mb-4">
+                     @if(Auth::check() && Auth::user()->is_admin)
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Todas as Transações</h3>
+                    <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 text-blue-400">Visualize o histórico completo de compras e vendas de todos os usuários.</p>
+                    @else
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Minhas Compras</h3>
                     <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 text-red-400">Produtos que você adquiriu na plataforma.</p>
+                @endif
                 </header>
+
 
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">

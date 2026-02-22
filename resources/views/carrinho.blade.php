@@ -134,7 +134,7 @@
                         <div class="d-flex align-items-center gap-3">
                             <div class="cart-img-container flex-shrink-0">
                                 @if($product['foto'])
-                                    <img src="{{ asset('storage/' . $product['foto']) }}" width="80" class="rounded">
+                                    <img src="{{ asset($product['foto']) }}" width="80" class="rounded">
                                 @else
                                     <i class="bi bi-box-seam-fill fs-2"></i>
                                 @endif

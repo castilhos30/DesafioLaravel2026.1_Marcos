@@ -154,8 +154,33 @@
             background-color: #111827 !important;
             color: #666 !important;
             border-color: #222 !important;
-        }
-    </style>
+}
+
+        .modal-content {
+            background-color: #ffffff; 
+            color: #1a1a1a !important; 
+}
+
+    .modal-header .modal-title {
+    color: #ffffff !important; 
+}
+
+    .modal-body label {
+    color: #4b5563 !important;
+    font-weight: 600;
+}
+
+    .modal-body input, .modal-body select, .modal-body textarea {
+    background-color: #f9fafb !important;
+    color: #111827 !important;
+    border: 1px solid #d1d5db !important;
+}
+
+        .modal-body p, .modal-body span {
+             color: #111827 !important;
+    }
+    
+</style>
 </head>
 <body class="container mt-5">
 
@@ -241,7 +266,7 @@
             <div class="modal-body">
                 
                 <div class="text-center mb-4">
-                        <img src="{{ asset('storage/' . $product->foto) }}" 
+                        <img src="{{ asset($product->foto) }}" 
                              alt="{{ $product->nome }}" 
                              class="img-fluid rounded shadow-sm" 
                              style="max-height: 250px; object-fit: contain;">
@@ -319,7 +344,11 @@
                                         
                                         <div class="mb-3">
                                             <label>Foto do Produto</label>
-                                            <input type="file" name="foto" class="form-control">
+                                            <div class="text-center mb-2">
+                                                <img id="preview-edit-{{ $product->id }}" src="{{ asset($product->foto) }}" class="img-thumbnail" style="max-height: 150px; display: block; margin: 0 auto;">
+                                            </div>
+                                            <input type="file" name="foto" class="form-control" 
+                                            onchange="previewImage(this, 'preview-edit-{{ $product->id }}')">
                                         </div>
 
                                         <div class="row">
