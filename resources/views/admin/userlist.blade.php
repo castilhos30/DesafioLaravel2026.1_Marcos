@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Lista de Usuários RPM Motos</title>
 
 <x-app-layout>  
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -120,6 +120,47 @@
         .modal-content, .modal-content p, .modal-content label {
                 color: #1f2937 !important;
             }
+
+
+            .pagination-wrapper nav {
+            background-color: transparent !important;
+            border: none !important;
+        }
+        .pagination-wrapper .d-sm-flex {
+            justify-content: center !important;
+            width: 100%;
+        }
+        .pagination-wrapper .d-sm-flex > div:first-child {
+            display: none !important;
+        }
+        .pagination-wrapper .pagination {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin-bottom: 0;
+        }
+        .pagination-wrapper .page-link {
+            background-color: #1e1e1e !important;
+            border-color: #333 !important;
+            color: #ccc !important;
+            padding: 10px 16px;
+            transition: all 0.2s;
+        }
+        .pagination-wrapper .page-link:hover {
+            background-color: #374151 !important;
+            color: #fff !important;
+            border-color: #555 !important;
+        }
+        .pagination-wrapper .page-item.active .page-link {
+            background: linear-gradient(135deg, #AE171C 0%, #d62d35 100%) !important;
+            border-color: #AE171C !important;
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .pagination-wrapper .page-item.disabled .page-link {
+            background-color: #111827 !important;
+            color: #666 !important;
+            border-color: #222 !important;
+        }
     </style>
 </head>
 <body>
@@ -229,6 +270,10 @@
         </div>
     </div>
 @endforeach
+
+<div class="d-flex justify-content-center mt-5 mb-4 pagination-wrapper">
+            {{ $users->links() }}
+        </div>
 
    {{-- MODAL Editar --}}
 

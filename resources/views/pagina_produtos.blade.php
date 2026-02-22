@@ -16,6 +16,7 @@
             font-family: 'Inter', sans-serif;
         }
 
+       
         nav, nav[class*="bg-white"] {
             background-color: #1f2937 !important; 
             border-bottom: 1px solid #374151 !important;
@@ -24,27 +25,36 @@
             color: #e5e7eb !important; 
             text-decoration: none !important; 
         }
-        
         nav button.bg-white, input.bg-white {
             background-color: #1f2937 !important; 
             border: 1px solid #374151 !important;
             color: #e5e7eb !important; 
         }
 
+      
         .search-input {
-            background-color: #FFFFFF;
+            background-color: #1e1e1e;
             border: 1px solid #333;
             color: #fff;
-            padding: 10px 20px;
-            border-radius: 30px;
+            padding: 8px 16px;
+            border-radius: 8px;
+            outline: none;
+            width: 100%;
+            max-width: 250px;
+        }
+        .search-input:focus {
+            border-color: #AE171C;
         }
         .filter-select {
             background-color: #1e1e1e;
             border: 1px solid #333;
             color: #ccc;
             border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
         }
 
+       
         .product-card {
             background-color: #1e1e1e;
             border: 1px solid transparent;
@@ -54,14 +64,13 @@
             position: relative;
             display: flex;
             flex-direction: column;
+            cursor: pointer;
         }
-        
         .product-card:hover {
             transform: translateY(-8px);
             border-color: #333;
             box-shadow: 0 15px 30px rgba(0,0,0,0.6);
         }
-
         .img-container {
             height: 250px;
             background-color: #181818;
@@ -69,7 +78,7 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden; /* Para a imagem não vazar */
+            overflow: hidden;
         }
         .img-container i {
             color: #333;
@@ -116,29 +125,76 @@
             background-color: #27ae60;
             color: #fff;
         }
+
+       
+        .pagination-wrapper nav {
+            background-color: transparent !important;
+            border: none !important;
+        }
+        .pagination-wrapper .d-sm-flex {
+            justify-content: center !important;
+            width: 100%;
+        }
+        .pagination-wrapper .d-sm-flex > div:first-child {
+            display: none !important;
+        }
+        .pagination-wrapper .pagination {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            margin-bottom: 0;
+        }
+        .pagination-wrapper .page-link {
+            background-color: #1e1e1e !important;
+            border-color: #333 !important;
+            color: #ccc !important;
+            padding: 10px 16px;
+            transition: all 0.2s;
+        }
+        .pagination-wrapper .page-link:hover {
+            background-color: #374151 !important;
+            color: #fff !important;
+            border-color: #555 !important;
+        }
+        .pagination-wrapper .page-item.active .page-link {
+            background: linear-gradient(135deg, #AE171C 0%, #d62d35 100%) !important;
+            border-color: #AE171C !important;
+            color: #fff !important;
+            font-weight: bold;
+        }
+        .pagination-wrapper .page-item.disabled .page-link {
+            background-color: #111827 !important;
+            color: #666 !important;
+            border-color: #222 !important;
+        }
     </style>
 </head>
 <body>
     <div class="container mt-5">
         <div class="row align-items-center mb-5">
-            <div class="col-md-6">
+            <div class="col-md-5">
                 <h1 class="fw-bold text-white mb-0">Catálogo</h1>
                 <p class="text-secondary mt-1">Encontre as melhores peças para o seu projeto.</p>
             </div>
-            <div class="col-md-6">
-                <div class="d-flex gap-2 justify-content-md-end">
-                    <select class="form-select filter-select w-auto">
-                        <option selected>Todas as Categorias</option>
-                        <option value="1">Peças</option>
-                        <option value="2">Acessórios</option>
-                        <option value="3">Ferramentas</option>
+            
+            <div class="col-md-7 mt-3 mt-md-0">
+                <form action="{{ route('produtos') }}" method="GET" class="d-flex gap-2 justify-content-md-end align-items-center flex-wrap">
+                    
+                    <select name="categoria" class="form-select filter-select w-auto" onchange="this.form.submit()">
+                        <option value="">Todas as Categorias</option>
+                        <option value="Peças" {{ request('categoria') == 'Peças' ? 'selected' : '' }}>Peças</option>
+                        <option value="Acessórios" {{ request('categoria') == 'Acessórios' ? 'selected' : '' }}>Acessórios</option>
+                        <option value="Ferramentas" {{ request('categoria') == 'Ferramentas' ? 'selected' : '' }}>Ferramentas</option>
+                        <option value="Vestuário" {{ request('categoria') == 'Vestuário' ? 'selected' : '' }}>Vestuário</option>
                     </select>
-                </div>
+
+                    @if(request('search') || request('categoria'))
+                        <a href="{{ route('home') }}" class="btn btn-outline-light" style="border-radius: 8px;">Limpar</a>
+                    @endif
+                </form>
             </div>
         </div>
 
         <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-
             @forelse($products as $product)
                 <div class="col">
                     <div class="product-card h-100" onclick="window.location='{{ route('produto_individual', $product->id) }}'">
@@ -159,36 +215,33 @@
                                     <span class="price-main">R$ {{ number_format($product->preco, 2, ',', '.') }}</span>
                                 </div>
                              
-                                    @if(!Auth::user()->is_admin)
-                                    <form action="{{ route('add_to_cart', $product->id) }}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn-comprar">Comprar</button>
+                                @if(Auth::check() && !Auth::user()->is_admin)
+                                    <form action="{{ route('add_to_cart', $product->id) }}" method="POST" onclick="event.stopPropagation();">
+                                        @csrf
+                                        <button type="submit" class="btn-comprar">Comprar</button>
                                     </form>
-                                    @endif
+                                @endif
                             </div>
                         </div>
                     </div>
                 </div>
             @empty
                 <div class="col-12 text-center py-5">
-                    <h3 class="text-muted">Nenhum produto cadastrado ainda.</h3>
+                    <h3 class="text-muted"><i class="bi bi-emoji-frown"></i> Nenhum produto encontrado.</h3>
                 </div>
             @endforelse
-
         </div> 
 
-        <div class="d-flex justify-content-center mt-5 mb-5">
-            {{-- {{ $products->links() }} --}}
+        <div class="d-flex justify-content-center mt-5 mb-4 pagination-wrapper">
+            {{ $products->links() }}
         </div>
         
-        <footer class="text-center text-muted py-4 border-top border-secondary border-opacity-25">
+        <footer class="text-center text-muted py-4 border-top border-secondary border-opacity-25 mt-4">
             <p class="mb-0">RPM Motos</p>
         </footer>
-
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
 </body>
 </html>
 </x-app-layout>

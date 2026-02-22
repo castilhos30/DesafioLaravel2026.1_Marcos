@@ -10,13 +10,13 @@ class ProductsController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::paginate(10);
         return view('admin.productslist', compact('products'));
     }
 
     public function pagina_produtos() 
     {
-        $products = Product::all();
+        $products = Product::paginate(12);
         return view('pagina_produtos', compact('products'));
     }
 

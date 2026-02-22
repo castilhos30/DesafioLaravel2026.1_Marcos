@@ -13,7 +13,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('address')->get();
+        $users = User::with('address')->paginate(10);
         return view('admin.userlist', compact('users'));
     }
 
