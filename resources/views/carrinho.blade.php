@@ -101,6 +101,31 @@
 .no-spinners {
     -moz-appearance: textfield;
 }
+
+@media (max-width: 768px) {
+    .card-dark .d-flex.align-items-center {
+        flex-direction: column; 
+    }
+
+    .cart-img-container {
+        width: 100%; 
+        height: 150px;
+    }
+
+    .flex-grow-1 {
+        width: 100%;
+    }
+
+    .d-flex.justify-content-between.align-items-end {
+        flex-direction: column; 
+        align-items: center !important;
+        gap: 15px;
+    }
+
+    .price-tag {
+        font-size: 2rem;
+    }
+}
     </style>
 </head>
 <body>
