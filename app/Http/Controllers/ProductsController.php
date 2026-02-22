@@ -22,6 +22,9 @@ class ProductsController extends Controller
 
     public function store(Request $request)
     {
+        if (Auth::user()->is_admin) {
+        return redirect()->back()->with('error', 'Administradores não podem criar produtos.');
+    }
         $request->validate([
             'nome' => 'required',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', 
@@ -87,6 +90,10 @@ class ProductsController extends Controller
 
     public function adicionarAoCarrinho(Request $request, $id) 
     {
+        if (Auth::user()->is_admin) {
+        return redirect()->back()->with('error', 'Administradores não podem realizar compras no sistema.');
+    }
+
         $product = Product::find($id);
 
         if(!$product) {

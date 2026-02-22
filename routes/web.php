@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\Customer;
-use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\CarrinhoController;
@@ -12,6 +11,8 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\ChartsController;
 use App\Http\Controllers\ReportController;
 use App\Models\Product;
+use App\Models\User;
+use App\Http\Controllers\AdminUserController;
 
 Route::get('/', function () {
     $products = Product::all();
@@ -55,13 +56,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/userlist/{user}', [UserController::class, 'destroy'])->name('destroy');
 
     Route::middleware(Admin::class)->prefix('admin')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('admin.dashboard');
         
         Route::post('/enviar-email/{user}', [UserController::class, 'enviarEmail'])->name('admin.enviar_email');
         Route::get('/historico/excel', [ReportController::class, 'baixarExcel'])->name('historico.excel');
-    });
+        
+        Route::get('/adminlist', [\App\Http\Controllers\AdminUserController::class, 'index'])->name('admin.index');
+        Route::post('/adminlist', [\App\Http\Controllers\AdminUserController::class, 'store'])->name('admin.store');
+        Route::put('/adminlist/{admin}', [\App\Http\Controllers\AdminUserController::class, 'update'])->name('admin.update');
+        Route::delete('/adminlist/{admin}', [\App\Http\Controllers\AdminUserController::class, 'destroy'])->name('admin.destroy');
+    
+        });
 
 });
 

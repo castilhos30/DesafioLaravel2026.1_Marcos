@@ -28,6 +28,7 @@ class User extends Authenticatable
     'telefone',
     'data_nascimento',
     'saldo',
+    'criado_por',
 ];
     /**
      * The attributes that should be hidden for serialization.

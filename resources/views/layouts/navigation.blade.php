@@ -35,6 +35,13 @@
                         {{ __('Histórico') }}
                     </x-nav-link>
 
+
+                @if(Auth::check() && Auth::user()->is_admin)
+                    <x-nav-link :href="route('admin.index')" :active="request()->routeIs('admin.index')">
+                        {{ __('Administração') }}
+                    </x-nav-link>
+                @endif
+                
                 </div>
             </div>
 

@@ -26,9 +26,16 @@ class DatabaseSeeder extends Seeder
             'is_admin' => false,
         ]);
 
+        User::factory()->create([
+            'name' => 'Test Admin',
+            'email' => 'admin@example.com',
+            'password' => Hash::make('password'),
+            'is_admin' => true,
+        ]);
 
-        User::factory(10)->create();
-        Product::factory(30)->create();
+
+        User::factory(16)->create();
+        Product::factory(32)->create();
         Sale::factory(50)->create();
         Sale::factory(10)->create([
             'vendedor_id' => 1 

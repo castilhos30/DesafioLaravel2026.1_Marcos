@@ -162,9 +162,14 @@
 
                             <div class="d-grid gap-3 d-md-flex justify-content-md-start">
                                 @if($product->quantidade > 0)
+                                @if(!Auth::user()->is_admin)
+                                <form action="{{ route('add_to_cart', $product->id) }}" method="POST">
+                                    @csrf
                                     <button class="btn btn-success btn-lg px-5 fw-bold py-3 flex-grow-1" type="submit">
                                         <i class="bi bi-bag-check-fill me-2"></i> COMPRAR AGORA
                                     </button>
+                                </form>
+                                @endif
                                 @else
                                     <button class="btn btn-secondary btn-lg px-5 fw-bold py-3 flex-grow-1" type="button" disabled>
                                         <i class="bi bi-x-circle me-2"></i> INDISPONÍVEL

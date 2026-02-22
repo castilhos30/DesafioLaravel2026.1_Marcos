@@ -158,9 +158,13 @@
                                 <div class="d-flex justify-content-between align-items-end">
                                     <span class="price-main">R$ {{ number_format($product->preco, 2, ',', '.') }}</span>
                                 </div>
-                                <a href="{{ route('add_to_cart', $product->id) }}" class="btn btn-comprar shadow-sm">
-                                    <i class="bi bi-bag-plus me-1"></i> Comprar
-                                </a>
+                             
+                                    @if(!Auth::user()->is_admin)
+                                    <form action="{{ route('add_to_cart', $product->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="btn-comprar">Comprar</button>
+                                    </form>
+                                    @endif
                             </div>
                         </div>
                     </div>

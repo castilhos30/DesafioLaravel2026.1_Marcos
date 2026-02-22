@@ -121,9 +121,11 @@
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Lista de Produtos</h1>
+        @if(!Auth::user()->is_admin)
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createProductModal">
             + Novo Produto
         </button>
+        @endif
     </div>
 
     @if(session('success'))
