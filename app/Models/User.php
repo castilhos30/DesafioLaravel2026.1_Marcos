@@ -18,13 +18,17 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'foto',
-    ];
-
+   protected $fillable = [
+    'name',
+    'email',
+    'password',
+    'foto',
+    'is_admin',
+    'cpf',
+    'telefone',
+    'data_nascimento',
+    'saldo',
+];
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -51,5 +55,12 @@ class User extends Authenticatable
     public function address()
     {
     return $this->hasOne(Address::class);
+    }
+
+    public function getSaldoAttribute()
+    {
+        $totalVendas = \App\Models\Sale::where('vendedor_id', $this->id)->sum('valor');
+        $totalCompras = \App\Models\Sale::where('comprador_id', $this->id)->sum('valor');
+        return $totalVendas - $totalCompras;
     }
 }

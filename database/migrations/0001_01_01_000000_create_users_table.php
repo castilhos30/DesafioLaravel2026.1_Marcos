@@ -19,6 +19,10 @@ return new class extends Migration
             $table->string('password');
             $table->string('foto')->nullable();
             $table->boolean('is_admin')->default(false);
+            $table->string('cpf')->unique()->nullable();
+            $table->string('telefone')->nullable();
+            $table->date('data_nascimento')->nullable();
+            $table->decimal('saldo', 10, 2)->default(0.00);
             $table->rememberToken();
             $table->timestamps();
         });
@@ -47,5 +51,8 @@ return new class extends Migration
         Schema::dropIfExists('users');
         Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::table('users', function (Blueprint $table) {
+        $table->dropColumn(['cpf', 'telefone', 'data_nascimento', 'saldo']);
+    });
     }
 };

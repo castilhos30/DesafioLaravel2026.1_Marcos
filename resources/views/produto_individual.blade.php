@@ -100,6 +100,7 @@
                             <small class="text-secondary" style="font-size: 1.25rem;">
                             <i class="bi bi-person-fill me-1"></i> 
                              {{ $product->user->name ?? 'RPM Motos' }}
+                             {{$product->user->telefone ? ' - ' . $product->user->telefone : ''}}
                             </small>
                         </div>
                         

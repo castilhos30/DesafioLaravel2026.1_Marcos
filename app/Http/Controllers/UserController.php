@@ -7,7 +7,7 @@ use App\Models\Address;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AdminMensagemMail; 
+use App\Mail\AdminMensagemMail;
 
 class UserController extends Controller
 {
@@ -17,40 +17,39 @@ class UserController extends Controller
         return view('admin.userlist', compact('users'));
     }
 
-    public function update(User $user, Request $request)
-    {
-   
-     if (Auth::id() !== $user->id && !Auth::user()->is_admin) {
-            return redirect()->route('index')->with('error', 'Ação não permitida. Você só pode editar o seu próprio perfil.');
-        }
-
-        $data = $request->only(['name', 'email']);
-        
-        if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
-            $data['foto'] = $request->foto->store('usuarios', 'public');
-        }
-        
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
-        }
-        
-        $user->update($data);
-        Address::updateOrCreate(
-            ['user_id' => $user->id],
-            [
-                'cep' => $request->cep,
-                'logradouro' => $request->logradouro,
-                'numero' => $request->numero,
-                'complemento' => $request->complemento,
-                'bairro' => $request->bairro,
-                'cidade' => $request->cidade,
-                'estado' => $request->estado,
-            ]
-        );
-
-        return redirect()->route('usuarios.index'); 
+   public function update(Request $request, User $user)
+{
+    
+    if (Auth::id() !== $user->id && !Auth::user()->is_admin) {
+        return redirect()->route('usuarios.index')->with('error', 'Ação não permitida.');
     }
 
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'cpf' => 'nullable|string|unique:users,cpf,' . $user->id, 
+    ]);
+
+    $data = $request->only(['name', 'email', 'telefone', 'data_nascimento', 'cpf']);
+
+    if ($request->filled('password')) {
+        $data['password'] = \Illuminate\Support\Facades\Hash::make($request->password);
+    }
+
+    if ($request->hasFile('foto') && $request->file('foto')->isValid()) {
+        $data['foto'] = $request->foto->store('usuarios', 'public');
+    }
+
+    $user->update($data);
+
+    if ($user->address) {
+        $user->address->update($request->only([
+            'cep', 'logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'estado'
+        ]));
+    }
+
+    return redirect()->route('usuarios.index');
+}
     public function store(Request $request)
     {
         
@@ -63,6 +62,9 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'foto' => $caminhoFoto,
+            'telefone' => $request->telefone,
+            'cpf' => $request->cpf,
+            'data_nascimento' => $request->data_nascimento,
         ]);
         Address::create([
             'user_id' => $user->id,
@@ -75,7 +77,7 @@ class UserController extends Controller
             'estado' => $request->estado,
         ]);
 
-        return redirect()->route('index');
+        return redirect()->route('usuarios.index');
     }
 
     public function destroy(User $user)

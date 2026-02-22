@@ -126,7 +126,7 @@
      <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Lista de Usuários</h1>
         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">
-            + Novo Usuário
+            + Novo Usuário  
         </button>
     </div>
 
@@ -146,7 +146,7 @@
             <th scope="row">{{ $user->id }}</th>
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
-            <td>
+            <td>    
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#showPostModal{{ $user->id }}">Visualizar</button>
                 @if(Auth::user()->is_admin)
                 <button type="button" class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#mailUserModal{{ $user->id }}">Enviar E-mail</button>
@@ -184,6 +184,18 @@
                     
                     <p>Email:</p>
                     <p class="fw-bold">{{ $user->email }}</p>
+
+                    <p class="fw-bold">Telefone:</p>
+                    <p>{{ $user->telefone }}</p>
+
+                    <p class="fw-bold">CPF:</p>
+                    <p>{{ $user->cpf }}</p>
+
+                     <p class="fw-bold">Saldo:</p>
+                    <p>R$ {{ number_format($user->saldo, 2, ',', '.') }}</p>
+
+                     <p class="fw-bold">Data de Nascimento:</p>
+                    <p>{{ $user->data_nascimento ? \Carbon\Carbon::parse($user->data_nascimento)->format('d/m/Y') : 'Não informada' }}</p>
                     
                     <hr>
                     
@@ -259,6 +271,15 @@
             <p class="fw-bold mt-2">Senha (Deixe em branco para manter):</p>
             <input type="password" name="password" class="form-control text-center">
 
+             <p class="fw-bold mt-3">Telefone:</p>
+            <input type="text" name="telefone" value="{{ $user->telefone ?? '' }}" class="form-control text-center">
+
+             <p class="fw-bold mt-3">CPF:</p>
+            <input type="text" name="cpf" value="{{ $user->cpf ?? '' }}" class="form-control text-center">
+
+             <p class="fw-bold mt-3">Data de Nascimento:</p>
+            <input type="date" name="data_nascimento" value="{{ $user->data_nascimento ?? '' }}" class="form-control text-center">
+
             <hr>
 
             <p class="fw-bold">CEP:</p>
@@ -295,7 +316,7 @@
 @endforeach
 
 {{-- MODAL CRIAR --}}
-<div class="modal fade" id="createPostModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -324,9 +345,17 @@
 
                     <p class="fw-bold mt-2">Senha:</p>
                     <input type="password" name="password" class="form-control text-center" placeholder="******">
+                    
+                    <p class="fw-bold mt-3">Telefone:</p>
+                    <input type="text" name="telefone" class="form-control text-center" placeholder="(00) 00000-0000">
 
-                    <hr>
+                    <p class="fw-bold mt-3">CPF:</p>
+                    <input type="text" name="cpf" class="form-control text-center" placeholder="000.000.000-00">
 
+                    <p class="fw-bold mt-3">Data de Nascimento:</p>
+                    <input type="date" name="data_nascimento" class="form-control text-center">
+
+                        <hr>
                     <p class="fw-bold">CEP:</p>
                     <input type="text" name="cep" class="form-control text-center" placeholder="00000-000">
 
