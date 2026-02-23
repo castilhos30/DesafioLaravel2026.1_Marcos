@@ -30,39 +30,45 @@
         <p><strong>Data de Emissão:</strong> {{ \Carbon\Carbon::now('America/Sao_Paulo')->format('d/m/Y H:i') }}</p>
     </div>
 
-    <h2>Minhas Compras</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Foto</th>
-                <th>Produto</th>
-                <th>Categoria</th>
-                <th>Vendedor</th>
-                <th>Data</th>
-                <th>Valor</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse($compras as $compra)
-            <tr>
-                <td>
-                    @if($compra->product && $compra->product->foto)
-                        <img src="{{ public_path($compra->product->foto) }}" class="img-produto">
-                    @else
-                        <span style="color: #ccc;">Sem foto</span>
-                    @endif
-                </td>
-                <td>{{ $compra->product->nome ?? 'N/A' }}</td>
-                <td>{{ $compra->product->categorias ?? 'N/A' }}</td>
-                <td>{{ $compra->vendedor->name ?? 'N/A' }}</td>
-                <td>{{ $compra->created_at->format('d/m/Y') }}</td>
-                <td class="text-red">R$ {{ number_format($compra->valor, 2, ',', '.') }}</td>
-            </tr>
-            @empty
-            <tr><td colspan="6" style="text-align:center">Nenhuma compra registrada.</td></tr>
-            @endforelse
-        </tbody>
-    </table>
+    @if(Auth::user()->is_admin)
+        <div class="user-info">
+            <p><strong>Relatório Gerado para Administrador:</strong> Este relatório inclui todas as transações de compra e venda registradas na plataforma, abrangendo todos os usuários. Ele é destinado a fornecer uma visão geral completa das atividades comerciais para fins de monitoramento e análise.</p>
+        </div>
+    @else
+        <h2>Minhas Compras</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Foto</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Vendedor</th>
+                    <th>Data</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($compras as $compra)
+                <tr>
+                    <td>
+                        @if($compra->product && $compra->product->foto)
+                            <img src="{{ public_path($compra->product->foto) }}" class="img-produto">
+                        @else
+                            <span style="color: #ccc;">Sem foto</span>
+                        @endif
+                    </td>
+                    <td>{{ $compra->product->nome ?? 'N/A' }}</td>
+                    <td>{{ $compra->product->categorias ?? 'N/A' }}</td>
+                    <td>{{ $compra->vendedor->name ?? 'N/A' }}</td>
+                    <td>{{ $compra->created_at->format('d/m/Y') }}</td>
+                    <td class="text-red">R$ {{ number_format($compra->valor, 2, ',', '.') }}</td>
+                </tr>
+                @empty
+                <tr><td colspan="6" style="text-align:center">Nenhuma compra registrada.</td></tr>
+                @endforelse
+            </tbody>
+        </table>
+    @endif
 
     <h2>Minhas Vendas</h2>
     <table>
@@ -99,7 +105,7 @@
     </table>
 
     <div class="footer">
-        <p>Code Jr - Plataforma de Compra e Venda de Produtos Usados da RPM Motos</p>
+        <p>Plataforma de Compra e Venda de Produtos Usados da RPM Motos</p>
         <p>Gerado em {{ \Carbon\Carbon::now('America/Sao_Paulo')->format('d/m/Y H:i') }}</p>
     </div>
 
