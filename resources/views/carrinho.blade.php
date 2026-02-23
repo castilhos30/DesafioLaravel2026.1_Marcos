@@ -250,12 +250,18 @@
                         
                         <div class="d-grid gap-2">
                             <input type="hidden" name="itens" value="{{ json_encode($carrinho) }}">
-                            
+                            @if(Auth::user()->saldo< $total)
+                                    <button class="btn btn-secondary btn-lg px-5 fw-bold py-3 flex-grow-1" type="button" disabled>
+                                        <i class="bi bi-x-circle me-2"></i> Saldo Insuficiente
+                                    </button>
+                                @else
                             <button type="submit" class="btn btn-checkout rounded-pill shadow-lg" {{ $total == 0 ? 'disabled' : '' }}>
                                 Finalizar Compra
                             </button>
+                            @endif
                         </div>
                     </form>      
+
                     
                     <a href="/produtos" class="btn btn-link text-secondary text-decoration-none text-center mt-3 d-block">
                         Continuar Comprando

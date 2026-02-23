@@ -168,7 +168,7 @@
                                     <button class="btn btn-success btn-lg px-5 fw-bold py-3 flex-grow-1" type="submit">
                                         <i class="bi bi-bag-check-fill me-2"></i> COMPRAR AGORA
                                     </button>
-                                    @if(session('success')) {{-- Mudei de 'status' para 'success' --}}
+                                    @if(session('success'))
                                         <div id="alert-carrinho" class="alert alert-success position-fixed top-0 start-50 translate-middle-x mt-4 shadow-lg"  style="z-index: 9999; border-radius: 50px; padding: 15px 30px; background-color: #2ecc71; border: none; color: white;">
                                          <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
                                         </div>
